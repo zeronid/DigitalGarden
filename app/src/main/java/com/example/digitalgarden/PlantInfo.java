@@ -14,6 +14,7 @@ public class PlantInfo extends AppCompatActivity {
     public static ProgressBar waterLevelProgress;
     public TextView plantName;
     public TextView plantType;
+    public TextView waterLevelTextView;
 
     //Water a plant with the water button
     public void water(View view){
@@ -51,10 +52,14 @@ public class PlantInfo extends AppCompatActivity {
         waterLevelProgress = findViewById(R.id.waterLevelProgressBar);
         plantName = findViewById(R.id.plantNameTextView);
         plantType = findViewById(R.id.plantTypeTextView);
+        waterLevelTextView = findViewById(R.id.waterLevelTextView);
 
         waterLevelProgress.setProgress(getIntent().getExtras().getInt("waterLevel"));
         plantName.setText("Name: " + getIntent().getExtras().getString("name"));
         plantType.setText("Type: " + getIntent().getExtras().getString("type"));
+
+        waterLevelTextView.setText("Water level: " + waterLevelProgress.getProgress() + "%");
+        waterLevelProgress.setScaleY(6f);
 
     }
 

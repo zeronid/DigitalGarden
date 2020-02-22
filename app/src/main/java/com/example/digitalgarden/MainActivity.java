@@ -31,7 +31,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         loadData();
+        for (int i = 0 ; i<plants.size();i++){
+            plantNames.add(plants.get(i).name);
+        }
 
 
         //Setting up the ListView

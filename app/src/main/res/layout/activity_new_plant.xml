@@ -8,13 +8,15 @@
 
     <EditText
         android:id="@+id/newPlantNameEditText"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="70dp"
         android:layout_marginEnd="50dp"
+        android:background="@drawable/bg_search"
         android:ems="10"
-        android:hint="Enter Plant Name"
+        android:hint="Plant Name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -28,10 +30,10 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="50dp"
+        android:background="@drawable/bg_search"
         android:completionHint="Please select the type of your plant"
-
         android:completionThreshold="1"
-        android:hint="Enter Plant Type"
+        android:hint="Plant Type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,11 +43,30 @@
         android:id="@+id/button4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/roundedbutton"
+        android:backgroundTint="#037A08"
         android:onClick="makePlant"
         android:text="Make a new plant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="171dp"
+        android:layout_height="190dp"
+        android:layout_marginTop="79dp"
+        android:layout_marginBottom="215dp"
+        app:layout_constraintBottom_toTopOf="@+id/button4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newPlantTypeEditText"
+        app:srcCompat="@drawable/plant"
+        tools:srcCompat="@drawable/plant" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

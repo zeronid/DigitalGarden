@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Digital Garden</string>
-    <string name="add_plant">Add Plant</string>
+    <string name="add_plant">New Plant</string>
 </resources>
