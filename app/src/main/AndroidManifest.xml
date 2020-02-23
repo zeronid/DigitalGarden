@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewPlant"></activity>
+        <activity android:name=".NewPlant" />
         <activity android:name=".PlantInfo" />
         <activity android:name=".MainActivity">
             <intent-filter>

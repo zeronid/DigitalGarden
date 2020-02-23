@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PlantInfo extends AppCompatActivity {
 
@@ -21,6 +22,7 @@ public class PlantInfo extends AppCompatActivity {
         ProgressBar waterLevel = findViewById(R.id.waterLevelProgressBar);
         waterLevel.setProgress(100);
         MainActivity.plants.get(getIntent().getExtras().getInt("position")).waterPlant();
+        Toast.makeText(this, getIntent().getExtras().getString("name") + "'s water is now 100%!", Toast.LENGTH_SHORT).show();
     }
 
     //Delete an entry with the delete button
@@ -52,13 +54,11 @@ public class PlantInfo extends AppCompatActivity {
         waterLevelProgress = findViewById(R.id.waterLevelProgressBar);
         plantName = findViewById(R.id.plantNameTextView);
         plantType = findViewById(R.id.plantTypeTextView);
-        waterLevelTextView = findViewById(R.id.waterLevelTextView);
 
         waterLevelProgress.setProgress(getIntent().getExtras().getInt("waterLevel"));
         plantName.setText("Name: " + getIntent().getExtras().getString("name"));
         plantType.setText("Type: " + getIntent().getExtras().getString("type"));
 
-        waterLevelTextView.setText("Water level: " + waterLevelProgress.getProgress() + "%");
         waterLevelProgress.setScaleY(6f);
 
     }

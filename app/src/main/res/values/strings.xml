@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Digital Garden</string>
     <string name="add_plant">New Plant</string>
+    <string name="plant_name">Plant name</string>
+    <string name="plant_type">Plant type</string>
+    <string name="Make_a_new_plant">Create a new plant!</string>
 </resources>

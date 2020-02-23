@@ -33,9 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         loadData();
-        for (int i = 0 ; i<plants.size();i++){
-            plantNames.add(plants.get(i).name);
-        }
 
 
         //Setting up the ListView
@@ -49,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent goToPlantInfo = new Intent(getApplicationContext(),PlantInfo.class);
                 goToPlantInfo.putExtra("name",plantNames.get(position));
-                goToPlantInfo.putExtra("type",plants.get(position).type);
-                goToPlantInfo.putExtra("waterLevel",plants.get(position).waterLevel);
+                goToPlantInfo.putExtra("type",plants.get(position).getType());
+                goToPlantInfo.putExtra("waterLevel",plants.get(position).getWaterLevel());
                 goToPlantInfo.putExtra("position",position);
                 startActivity(goToPlantInfo);
             }
@@ -70,14 +67,14 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    public void updateListColors(){
+    private void updateListColors(){
         plantList.post(new Runnable() {
             public void run() {
                 plantList.setSelected(true);
                 for(int i=0;i<plantNames.size();i++){
-                    if(plants.get(i).waterLevel <= 25){
+                    if(plants.get(i).getWaterLevel() <= 25){
                         plantList.getChildAt(i).setBackgroundColor(Color.RED);
-                    } else if (plants.get(i).waterLevel <= 50){
+                    } else if (plants.get(i).getWaterLevel() <= 50){
                         plantList.getChildAt(i).setBackgroundColor(Color.YELLOW);
                     } else {
                         plantList.getChildAt(i).setBackgroundColor(Color.GREEN);
@@ -87,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         plantList = findViewById(R.id.plantListView);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_dropdown_item_1line,plantNames);
-        plantList.setAdapter(arrayAdapter);
+        myAdapter myAdapter = new myAdapter(this,plants);
+        plantList.setAdapter(myAdapter);
     }
 
 
@@ -110,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
         if(plants == null){
             plants = new ArrayList<>();
         }
+        //Gets all the names of the plants in "plantNames"
+        for (int i = 0 ; i<plants.size();i++){
+            plantNames.add(plants.get(i).getName());
+        }
     }
 
     @Override
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(today != lastTimeStarted){
             for(int i=0;i<plants.size();i++){
-                plants.get(i).waterLevel -= 10;
+                plants.get(i).setWaterLevel(plants.get(i).getWaterLevel()-10);
             }
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt("lastTimeStarted", today);
