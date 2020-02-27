@@ -31,10 +31,16 @@ public class myAdapter extends ArrayAdapter {
         View row = layoutInflater.inflate(R.layout.row,parent,false);
         TextView textName = row.findViewById(R.id.textView1);
         TextView textType = row.findViewById(R.id.textView2);
+        ImageView dropImage = row.findViewById(R.id.colorCircle);
 
         textName.setText(plants.get(position).getName());
         textType.setText(plants.get(position).getType());
-
+        dropImage.setImageResource(R.drawable.waterdropblue);
+        if(MainActivity.plants.get(position).getWaterLevel() <= 50){
+            dropImage.setImageResource(R.drawable.waterdropyellow);
+        } if (MainActivity.plants.get(position).getWaterLevel() <= 25){
+            dropImage.setImageResource(R.drawable.waterdropred);
+        }
 
 
         return row;

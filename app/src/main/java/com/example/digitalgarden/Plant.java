@@ -1,9 +1,10 @@
 package com.example.digitalgarden;
 
 public class Plant {
+
     private String name;
     private String type;
-    int waterLevel;
+    private int waterLevel;
 
     public Plant(String n,String t,int w){
         setName(n);

@@ -15,14 +15,14 @@ public class PlantInfo extends AppCompatActivity {
     public static ProgressBar waterLevelProgress;
     public TextView plantName;
     public TextView plantType;
-    public TextView waterLevelTextView;
+
 
     //Water a plant with the water button
     public void water(View view){
-        ProgressBar waterLevel = findViewById(R.id.waterLevelProgressBar);
-        waterLevel.setProgress(100);
-        MainActivity.plants.get(getIntent().getExtras().getInt("position")).waterPlant();
-        Toast.makeText(this, getIntent().getExtras().getString("name") + "'s water is now 100%!", Toast.LENGTH_SHORT).show();
+        waterLevelProgress = findViewById(R.id.waterLevelProgressBar);
+        waterLevelProgress.setProgress(100);
+        MainActivity.plants.get(getIntent().getExtras().getInt("position")).waterPlant();//Calls the Water Plant method of the Plant Class
+        Toast.makeText(this, MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName() + "'s water is now at 100%!", Toast.LENGTH_SHORT).show();
     }
 
     //Delete an entry with the delete button
@@ -34,12 +34,12 @@ public class PlantInfo extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (int i = 0 ; i<MainActivity.plantNames.size() ; i++){
-                            if (MainActivity.plantNames.get(i).equals(getIntent().getExtras().getString("name"))){
+                            if (MainActivity.plantNames.get(i).equals(MainActivity.plants.get(getIntent().getExtras().getInt("position")))){
                                 MainActivity.plantNames.remove(i);
                                 MainActivity.plants.remove(i);
                             }
                         }
-                        finish();
+                        finish();//Very important,when you press "Yes" finish the activity.
                     }
                 }).setNegativeButton(android.R.string.no,null).
                 setIcon(android.R.drawable.ic_dialog_alert)
@@ -55,11 +55,11 @@ public class PlantInfo extends AppCompatActivity {
         plantName = findViewById(R.id.plantNameTextView);
         plantType = findViewById(R.id.plantTypeTextView);
 
-        waterLevelProgress.setProgress(getIntent().getExtras().getInt("waterLevel"));
-        plantName.setText("Name: " + getIntent().getExtras().getString("name"));
-        plantType.setText("Type: " + getIntent().getExtras().getString("type"));
+        waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel());
+        plantName.setText("Name: " + MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
+        plantType.setText("Type: " + MainActivity.plants.get(getIntent().getExtras().getInt("position")).getType());
 
-        waterLevelProgress.setScaleY(6f);
+        waterLevelProgress.setScaleY(6f);//Bulks up the water progress bar.
 
     }
 

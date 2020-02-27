@@ -25,15 +25,12 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Plant> plants = new ArrayList<>();
     public ListView plantList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        loadData();
-
+        loadData(); //Loads up all the saved Plants.
 
         //Setting up the ListView
         plantList = findViewById(R.id.plantListView);
@@ -45,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent goToPlantInfo = new Intent(getApplicationContext(),PlantInfo.class);
-                goToPlantInfo.putExtra("name",plantNames.get(position));
-                goToPlantInfo.putExtra("type",plants.get(position).getType());
-                goToPlantInfo.putExtra("waterLevel",plants.get(position).getWaterLevel());
                 goToPlantInfo.putExtra("position",position);
                 startActivity(goToPlantInfo);
             }
@@ -56,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     //The add plant method that is called when create plant button is pressed.
     public void addPlant(View view){
-        Intent add = new Intent(getApplicationContext(),NewPlant.class);
+        Intent add = new Intent(getApplicationContext(), NewPlant.class);
         startActivity(add);
     }
 
@@ -71,20 +65,20 @@ public class MainActivity extends AppCompatActivity {
         plantList.post(new Runnable() {
             public void run() {
                 plantList.setSelected(true);
-                for(int i=0;i<plantNames.size();i++){
-                    if(plants.get(i).getWaterLevel() <= 25){
-                        plantList.getChildAt(i).setBackgroundColor(Color.RED);
-                    } else if (plants.get(i).getWaterLevel() <= 50){
-                        plantList.getChildAt(i).setBackgroundColor(Color.YELLOW);
-                    } else {
-                        plantList.getChildAt(i).setBackgroundColor(Color.GREEN);
-                    }
-                }
+//                for(int i=0;i<plantNames.size();i++){
+//                    if(plants.get(i).getWaterLevel() <= 25){
+//                        plantList.getChildAt(i).setBackgroundColor(Color.GREEN);
+//                    } else if (plants.get(i).getWaterLevel() <= 50){
+//                        plantList.getChildAt(i).setBackgroundColor(Color.YELLOW);
+//                    } else {
+//                        plantList.getChildAt(i).setBackgroundColor(Color.GREEN);
+//                    }
+//                }
             }
         });
 
         plantList = findViewById(R.id.plantListView);
-        myAdapter myAdapter = new myAdapter(this,plants);
+        com.example.digitalgarden.myAdapter myAdapter = new myAdapter(this, plants);
         plantList.setAdapter(myAdapter);
     }
 
@@ -113,17 +107,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        saveData();
-        super.onDestroy();
-    }
-
 
     //Checks if a day has passed and updates the water ammount of the plant.
     private void checkDate(){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        int lastTimeStarted = settings.getInt("lastTimeStarted",-1);
+        int lastTimeStarted = settings.getInt("lastTimeStarted", -1);
         Calendar calendar = Calendar.getInstance();
         int today = calendar.get(Calendar.DAY_OF_YEAR);
 
@@ -135,5 +123,11 @@ public class MainActivity extends AppCompatActivity {
             editor.putInt("lastTimeStarted", today);
             editor.apply();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        saveData();
+        super.onDestroy();
     }
 }
