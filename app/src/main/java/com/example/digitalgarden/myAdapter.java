@@ -32,7 +32,10 @@ public class myAdapter extends ArrayAdapter {
         TextView textName = row.findViewById(R.id.textView1);
         TextView textType = row.findViewById(R.id.textView2);
         ImageView dropImage = row.findViewById(R.id.colorCircle);
+        ImageView plantImage = row.findViewById(R.id.plantImage);
 
+
+        plantImage.setImageBitmap(plants.get(position).getPlantPicture());
         textName.setText(plants.get(position).getName());
         textType.setText(plants.get(position).getType());
         dropImage.setImageResource(R.drawable.waterdropblue);

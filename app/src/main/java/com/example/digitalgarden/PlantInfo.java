@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ public class PlantInfo extends AppCompatActivity {
     public static ProgressBar waterLevelProgress;
     public TextView plantName;
     public TextView plantType;
+    public ImageView plantPicture;
 
 
     //Water a plant with the water button
@@ -33,13 +35,9 @@ public class PlantInfo extends AppCompatActivity {
                 setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (int i = 0 ; i<MainActivity.plantNames.size() ; i++){
-                            if (MainActivity.plantNames.get(i).equals(MainActivity.plants.get(getIntent().getExtras().getInt("position")))){
-                                MainActivity.plantNames.remove(i);
-                                MainActivity.plants.remove(i);
-                            }
-                        }
-                        finish();//Very important,when you press "Yes" finish the activity.
+                                MainActivity.plantNames.remove(getIntent().getExtras().getInt("position"));
+                                MainActivity.plants.remove(getIntent().getExtras().getInt("position"));
+                                finish();//Very important,when you press "Yes" finish the activity.
                     }
                 }).setNegativeButton(android.R.string.no,null).
                 setIcon(android.R.drawable.ic_dialog_alert)
@@ -54,10 +52,12 @@ public class PlantInfo extends AppCompatActivity {
         waterLevelProgress = findViewById(R.id.waterLevelProgressBar);
         plantName = findViewById(R.id.plantNameTextView);
         plantType = findViewById(R.id.plantTypeTextView);
+        plantPicture = findViewById(R.id.plantInfoPlantImageView);
 
         waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel());
         plantName.setText("Name: " + MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
         plantType.setText("Type: " + MainActivity.plants.get(getIntent().getExtras().getInt("position")).getType());
+        plantPicture.setImageBitmap(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantPicture());
 
         waterLevelProgress.setScaleY(6f);//Bulks up the water progress bar.
 

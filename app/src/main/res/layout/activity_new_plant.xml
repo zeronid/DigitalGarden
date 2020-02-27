@@ -57,17 +57,33 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/plantImageView"
         android:layout_width="171dp"
         android:layout_height="190dp"
-        android:layout_marginTop="79dp"
-        android:layout_marginBottom="215dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="170dp"
+        android:background="#C0C0C0"
+        android:clickable="true"
+        android:onClick="takePicture"
+        android:padding="4dp"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPlantTypeEditText"
+        app:layout_constraintTop_toBottomOf="@+id/uploadImageTextView"
         app:srcCompat="@drawable/plant"
         tools:srcCompat="@drawable/plant" />
+
+    <TextView
+        android:id="@+id/uploadImageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/upload_image"
+        app:layout_constraintBottom_toTopOf="@+id/plantImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newPlantTypeEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

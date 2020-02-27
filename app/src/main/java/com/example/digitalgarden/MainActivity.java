@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Setting up the ListView
         plantList = findViewById(R.id.plantListView);
-        updateListColors();
+        updateList();
         checkDate();
 
         //Called when you click on a plant
@@ -56,27 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        updateListColors();
+        updateList();
         checkDate();
         super.onResume();
     }
 
-    private void updateListColors(){
-        plantList.post(new Runnable() {
-            public void run() {
-                plantList.setSelected(true);
-//                for(int i=0;i<plantNames.size();i++){
-//                    if(plants.get(i).getWaterLevel() <= 25){
-//                        plantList.getChildAt(i).setBackgroundColor(Color.GREEN);
-//                    } else if (plants.get(i).getWaterLevel() <= 50){
-//                        plantList.getChildAt(i).setBackgroundColor(Color.YELLOW);
-//                    } else {
-//                        plantList.getChildAt(i).setBackgroundColor(Color.GREEN);
-//                    }
-//                }
-            }
-        });
-
+    private void updateList(){
         plantList = findViewById(R.id.plantListView);
         com.example.digitalgarden.myAdapter myAdapter = new myAdapter(this, plants);
         plantList.setAdapter(myAdapter);
