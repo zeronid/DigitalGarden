@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:background="#FFFFFF"
+    android:background="#673AB7"
     >
 
     <ImageView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="Plant Name"
-            android:textColor="#000"
+            android:textColor="#212121"
             android:textSize="20sp"
             android:textStyle="bold"></TextView>
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="Plant Type"
-            android:textColor="#a9a9a9"
+            android:textColor="#757575"
             android:textSize="15sp"
             android:textStyle="bold"
             ></TextView>

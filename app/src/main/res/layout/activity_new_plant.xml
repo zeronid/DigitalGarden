@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
+    android:background="#512DA8"
     tools:context=".NewPlant">
 
     <EditText
@@ -19,6 +19,7 @@
         android:ems="10"
         android:hint="@string/plant_name"
         android:inputType="textPersonName"
+        android:textColor="#212121"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +36,7 @@
         android:completionHint="Please select the type of your plant"
         android:completionThreshold="1"
         android:hint="@string/plant_type"
+        android:textColor="#212121"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +50,7 @@
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/roundedbutton"
-        android:backgroundTint="#037A08"
+        android:backgroundTint="#FFC107"
         android:onClick="makePlant"
         android:text="@string/Make_a_new_plant"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,6 +82,7 @@
         android:layout_marginTop="85dp"
         android:layout_marginBottom="20dp"
         android:text="@string/upload_image"
+        android:textColor="#212121"
         app:layout_constraintBottom_toTopOf="@+id/plantImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
