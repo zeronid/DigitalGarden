@@ -4,20 +4,23 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.FileOutputStream;
 
 public class NewPlant extends AppCompatActivity {
 
@@ -63,8 +66,22 @@ public class NewPlant extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==100){
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
+            saveImageToInternalStorage(captureImage);
             plantPicture = findViewById(R.id.plantImageView);
             plantPicture.setImageBitmap(captureImage);
         }
     }
+
+    public boolean saveImageToInternalStorage(Bitmap image) {
+        try {
+            FileOutputStream fos = openFileOutput(MainActivity.plants.size() + ".png", Context.MODE_PRIVATE);
+            image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+            return true;
+        } catch (Exception e) {
+            Log.e("saveToInternalStorage()", e.getMessage());
+            return false;
+        }
+    }
+
 }

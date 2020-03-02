@@ -1,17 +1,18 @@
 package com.example.digitalgarden;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 public class myAdapter extends ArrayAdapter {
@@ -35,7 +36,7 @@ public class myAdapter extends ArrayAdapter {
         ImageView plantImage = row.findViewById(R.id.plantImage);
 
 
-        plantImage.setImageBitmap(plants.get(position).getPlantPicture());
+        plantImage.setImageBitmap(getPlantImage(position));
         textName.setText(plants.get(position).getName());
         textType.setText(plants.get(position).getType());
         dropImage.setImageResource(R.drawable.waterdropblue);
@@ -46,6 +47,18 @@ public class myAdapter extends ArrayAdapter {
         }
 
 
+
         return row;
+    }
+
+    private Bitmap getPlantImage(int pos){
+        File f = new File(context.getFilesDir(),pos +".png");
+        Bitmap b = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.plant);
+        try {
+            b = BitmapFactory.decodeStream(new FileInputStream(f));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return b;
     }
 }
