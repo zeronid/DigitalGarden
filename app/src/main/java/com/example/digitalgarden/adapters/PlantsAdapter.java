@@ -25,7 +25,7 @@ public class PlantsAdapter extends ArrayAdapter {
     ArrayList<Plant> plants;
 
     PlantsAdapter(Context c, ArrayList<Plant> plants){
-        super(c, R.layout.row,R.id.textView1,plants);
+        super(c, R.layout.view_plant,R.id.textView1,plants);
         this.context = c;
         this.plants = plants;
     }
@@ -34,7 +34,7 @@ public class PlantsAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater layoutInflater =(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = layoutInflater.inflate(R.layout.row,parent,false);
+        View row = layoutInflater.inflate(R.layout.view_plant,parent,false);
         TextView textName = row.findViewById(R.id.textView1);
         TextView textType = row.findViewById(R.id.textView2);
         ImageView dropImage = row.findViewById(R.id.colorCircle);
