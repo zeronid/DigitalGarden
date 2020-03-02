@@ -2,13 +2,20 @@ package com.example.digitalgarden;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 public class PlantInfo extends AppCompatActivity {
 
@@ -36,6 +43,7 @@ public class PlantInfo extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                                 MainActivity.plantNames.remove(getIntent().getExtras().getInt("position"));
                                 MainActivity.plants.remove(getIntent().getExtras().getInt("position"));
+                                deleteImage(getIntent().getExtras().getInt("position"));
                                 finish();//Very important,when you press "Yes" finish the activity.
                     }
                 }).setNegativeButton(android.R.string.no,null).
@@ -56,10 +64,27 @@ public class PlantInfo extends AppCompatActivity {
         waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel());
         plantName.setText("Name: " + MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
         plantType.setText("Type: " + MainActivity.plants.get(getIntent().getExtras().getInt("position")).getType());
-        plantPicture.setImageBitmap(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantPicture());
+        plantPicture.setImageBitmap(getPlantImage(getIntent().getExtras().getInt("position")));
 
         waterLevelProgress.setScaleY(6f);//Bulks up the water progress bar.
 
+    }
+
+    private Bitmap getPlantImage(int pos){
+        File f = new File(getApplicationContext().getFilesDir(),pos +".png");
+        Bitmap b = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.plant);
+        try {
+            b = BitmapFactory.decodeStream(new FileInputStream(f));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
+
+    private void deleteImage(int pos){
+        File dir = getFilesDir();
+        File file = new File(dir, pos + ".png");
+        file.delete();
     }
 
 }
