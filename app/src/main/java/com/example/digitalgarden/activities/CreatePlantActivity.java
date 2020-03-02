@@ -1,4 +1,4 @@
-package com.example.digitalgarden;
+package com.example.digitalgarden.activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,9 +20,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.digitalgarden.models.Plant;
+import com.example.digitalgarden.R;
+
 import java.io.FileOutputStream;
 
-public class NewPlant extends AppCompatActivity {
+public class CreatePlantActivity extends AppCompatActivity {
 
     private static final String[] TYPES = new String[]{"Succulent","Cactus","Moss","Embryophyte"};
     private EditText newPlantName;

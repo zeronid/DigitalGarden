@@ -1,9 +1,8 @@
-package com.example.digitalgarden;
+package com.example.digitalgarden.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,10 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.digitalgarden.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 
-public class PlantInfo extends AppCompatActivity {
+public class PlantDisplayActivity extends AppCompatActivity {
 
     public static ProgressBar waterLevelProgress;
     public TextView plantName;
@@ -29,7 +30,7 @@ public class PlantInfo extends AppCompatActivity {
     public void water(View view){
         waterLevelProgress = findViewById(R.id.waterLevelProgressBar);
         waterLevelProgress.setProgress(100);
-        MainActivity.plants.get(getIntent().getExtras().getInt("position")).waterPlant();//Calls the Water Plant method of the Plant Class
+        MainActivity.plants.get(getIntent().getExtras().getInt("position")).water();//Calls the Water Plant method of the Plant Class
         Toast.makeText(this, MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName() + "'s water is now at 100%!", Toast.LENGTH_SHORT).show();
     }
 

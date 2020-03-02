@@ -1,4 +1,4 @@
-package com.example.digitalgarden;
+package com.example.digitalgarden.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,16 +11,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.digitalgarden.activities.MainActivity;
+import com.example.digitalgarden.models.Plant;
+import com.example.digitalgarden.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
-public class myAdapter extends ArrayAdapter {
+public class PlantsAdapter extends ArrayAdapter {
     Context context;
     ArrayList<Plant> plants;
 
-    myAdapter(Context c, ArrayList<Plant> plants){
-        super(c,R.layout.row,R.id.textView1,plants);
+    PlantsAdapter(Context c, ArrayList<Plant> plants){
+        super(c, R.layout.row,R.id.textView1,plants);
         this.context = c;
         this.plants = plants;
     }

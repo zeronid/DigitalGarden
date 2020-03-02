@@ -1,4 +1,4 @@
-package com.example.digitalgarden;
+package com.example.digitalgarden.models;
 
 import android.graphics.Bitmap;
 
@@ -16,7 +16,7 @@ public class Plant {
         setPlantPicture(pp);
     }
 
-    public void waterPlant(){
+    public void water(){
         this.waterLevel = 100;
     }
 

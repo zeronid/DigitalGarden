@@ -1,4 +1,4 @@
-package com.example.digitalgarden;
+package com.example.digitalgarden.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,10 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.example.digitalgarden.models.Plant;
+import com.example.digitalgarden.R;
+import com.example.digitalgarden.adapters.PlantsAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         plantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent goToPlantInfo = new Intent(getApplicationContext(),PlantInfo.class);
+                Intent goToPlantInfo = new Intent(getApplicationContext(), PlantDisplayActivity.class);
                 goToPlantInfo.putExtra("position",position);
                 startActivity(goToPlantInfo);
             }
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     //The add plant method that is called when create plant button is pressed.
     public void addPlant(View view){
-        Intent add = new Intent(getApplicationContext(), NewPlant.class);
+        Intent add = new Intent(getApplicationContext(), CreatePlantActivity.class);
         startActivity(add);
     }
 
@@ -58,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateList(){
         plantList = findViewById(R.id.plantListView);
-        com.example.digitalgarden.myAdapter myAdapter = new myAdapter(this, plants);
-        plantList.setAdapter(myAdapter);
+        PlantsAdapter plantsAdapter = new PlantsAdapter(this, plants);
+        plantList.setAdapter(plantsAdapter);
     }
 
 
