@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewPlant" />
-        <activity android:name=".PlantInfo" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".NewPlant" android:screenOrientation="portrait" />
+        <activity android:name=".PlantInfo" android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
