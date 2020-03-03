@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onPause() {
+        saveData();
+        super.onPause();
+    }
+
     private void updateList(){
         plantList = findViewById(R.id.plantListView);
         PlantsAdapter plantsAdapter = new PlantsAdapter(this, plants);

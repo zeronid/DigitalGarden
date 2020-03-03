@@ -72,8 +72,12 @@ public class PlantDisplayActivity extends AppCompatActivity {
     }
 
     private Bitmap getPlantImage(int pos){
-        File f = new File(getApplicationContext().getFilesDir(),pos +".png");
-        Bitmap b = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.plant);
+        if(MainActivity.plants.get(pos).getPlantImage() == -1) {
+            Bitmap bitMap = BitmapFactory.decodeResource(getResources(),R.drawable.plant);
+            return bitMap;
+        }
+        File f = new File(getFilesDir(),MainActivity.plants.get(pos).getPlantImage() +".png");
+        Bitmap b = BitmapFactory.decodeResource(getResources(),R.drawable.plant);
         try {
             b = BitmapFactory.decodeStream(new FileInputStream(f));
         } catch (Exception e) {
@@ -84,7 +88,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
 
     private void deleteImage(int pos){
         File dir = getFilesDir();
-        File file = new File(dir, pos + ".png");
+        File file = new File(dir, MainActivity.plants.get(pos).getPlantImage() + ".png");
         file.delete();
     }
 

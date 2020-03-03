@@ -7,13 +7,13 @@ public class Plant {
     private String name;
     private String type;
     private int waterLevel;
-    private Bitmap plantPicture;
+    private int imageNumber;
 
-    public Plant(String n,String t,int w,Bitmap pp){
+    public Plant(String n,String t,int w,int pp){
         setName(n);
         setType(t);
         setWaterLevel(w);
-        setPlantPicture(pp);
+        setPlantImage(pp);
     }
 
     public void water(){
@@ -38,7 +38,7 @@ public class Plant {
     public void setWaterLevel(int waterLevel){
         this.waterLevel = waterLevel;
     }
-    public Bitmap getPlantPicture(){return this.plantPicture;}
-    public void setPlantPicture(Bitmap pic){this.plantPicture = pic;}
+    public int getPlantImage(){return this.imageNumber;}
+    public void setPlantImage(int image){this.imageNumber = image;}
 
 }

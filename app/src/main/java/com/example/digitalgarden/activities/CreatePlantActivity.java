@@ -45,10 +45,12 @@ public class CreatePlantActivity extends AppCompatActivity {
         newPlantName = findViewById(R.id.newPlantNameEditText);
         plantPicture = findViewById(R.id.plantImageView);
         AutoCompleteTextView newPlantType = findViewById(R.id.newPlantTypeEditText);
+        Bitmap plantBitmap = ((BitmapDrawable)plantPicture.getDrawable()).getBitmap();
+        int plantPictureNumber = saveImageToInternalStorage(plantBitmap);
         if(MainActivity.plantNames.contains(newPlantName.getText().toString())){
             Toast.makeText(this, "This name is already taken", Toast.LENGTH_SHORT).show();
         } else {
-            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), 35,((BitmapDrawable)plantPicture.getDrawable()).getBitmap());
+            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), 35,plantPictureNumber);
             MainActivity.plants.add(plant);
             MainActivity.plantNames.add(newPlantName.getText().toString());
             finish();
@@ -69,21 +71,31 @@ public class CreatePlantActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==100){
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
-            saveImageToInternalStorage(captureImage);
             plantPicture = findViewById(R.id.plantImageView);
             plantPicture.setImageBitmap(captureImage);
         }
     }
 
-    public boolean saveImageToInternalStorage(Bitmap image) {
+    public int saveImageToInternalStorage(Bitmap image) {
         try {
-            FileOutputStream fos = openFileOutput(MainActivity.plants.size() + ".png", Context.MODE_PRIVATE);
+            int imageNumber = (int)(Math.random()*100000);
+            boolean uniqueNumber = false;
+            while (uniqueNumber = false) {
+                for (int i = 0; i < MainActivity.plants.size(); i++) {
+                    if (MainActivity.plants.get(i).getPlantImage() == imageNumber) {
+                        imageNumber = (int) (Math.random() * 100000);
+                        break;
+                    }
+                    uniqueNumber = true;
+                }
+            }
+            FileOutputStream fos = openFileOutput(imageNumber + ".png", Context.MODE_PRIVATE);
             image.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
-            return true;
+            return imageNumber;
         } catch (Exception e) {
             Log.e("saveToInternalStorage()", e.getMessage());
-            return false;
+            return -1;
         }
     }
 
