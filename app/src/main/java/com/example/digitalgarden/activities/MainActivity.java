@@ -1,12 +1,16 @@
 package com.example.digitalgarden.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -22,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
     //An array list for plant objects and one for the names only.
     public static ArrayList<String> plantNames = new ArrayList<>();
     public static ArrayList<Plant> plants = new ArrayList<>();
-    public ListView plantList;
+    public RecyclerView plantList;
+    int numOfColumns = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +37,19 @@ public class MainActivity extends AppCompatActivity {
         loadData(); //Loads up all the saved Plants.
 
         //Setting up the ListView
-        plantList = findViewById(R.id.plantListView);
+        plantList = findViewById(R.id.recyclerView);
         updateList();
         checkDate();
 
         //Called when you click on a plant
-        plantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent goToPlantInfo = new Intent(getApplicationContext(), PlantDisplayActivity.class);
-                goToPlantInfo.putExtra("position",position);
-                startActivity(goToPlantInfo);
-            }
-        });
+//        plantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent goToPlantInfo = new Intent(getApplicationContext(), PlantDisplayActivity.class);
+//                goToPlantInfo.putExtra("position",position);
+//                startActivity(goToPlantInfo);
+//            }
+//        });
     }
 
     //The add plant method that is called when create plant button is pressed.
@@ -67,9 +72,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateList(){
-        plantList = findViewById(R.id.plantListView);
-        PlantsAdapter plantsAdapter = new PlantsAdapter(this, plants);
-        plantList.setAdapter(plantsAdapter);
+        plantList = findViewById(R.id.recyclerView);
+        plantList.setLayoutManager(new GridLayoutManager(this, numOfColumns));
+        PlantsAdapter adapter = new PlantsAdapter(this, plantNames);
+        adapter.setClickListener(new PlantsAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent goToPlantInfo = new Intent(getApplicationContext(), PlantDisplayActivity.class);
+                goToPlantInfo.putExtra("position",position);
+                startActivity(goToPlantInfo);
+            }
+        });
+        plantList.setAdapter(adapter);
     }
 
 

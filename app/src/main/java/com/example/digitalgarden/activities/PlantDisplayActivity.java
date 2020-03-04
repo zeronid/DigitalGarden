@@ -76,7 +76,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
             Bitmap bitMap = BitmapFactory.decodeResource(getResources(),R.drawable.plant);
             return bitMap;
         }
-        File f = new File(getFilesDir(),MainActivity.plants.get(pos).getPlantImage() +".png");
+        File f = new File(getFilesDir(),MainActivity.plants.get(pos).getPlantImage() + ".png");
         Bitmap b = BitmapFactory.decodeResource(getResources(),R.drawable.plant);
         try {
             b = BitmapFactory.decodeStream(new FileInputStream(f));
