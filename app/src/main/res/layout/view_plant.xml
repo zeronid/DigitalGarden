@@ -4,7 +4,8 @@
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="250dp"
-    android:background="#512DA8">
+    android:background="#512DA8"
+    android:padding="1dp">
 
 
     <ImageView

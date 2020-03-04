@@ -4,100 +4,98 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#512DA8"
+    android:background="@color/colorPrimaryDark"
+    android:layout_gravity="center"
     tools:context=".activities.PlantDisplayActivity">
+
+    <ImageView
+        android:id="@+id/plantInfoPlantImageView"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:foreground="@drawable/gradient"
+        android:padding="1dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/plant" />
 
     <TextView
         android:id="@+id/plantNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:text="@string/plant_name"
-        android:textColor="#212121"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:textColor="@color/colorPrimary"
+        android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/plantTypeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="47dp"
         android:text="@string/plant_type"
-        android:textColor="#212121"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plantNameTextView" />
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintStart_toEndOf="@+id/plantNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/waterLevelProgressBar" />
 
     <ProgressBar
         android:id="@+id/waterLevelProgressBar"
         style="@android:style/Widget.Material.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="30dp"
-        android:progress="100"
-        android:progressTint="#2196F3"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="3dp"
+        android:maxHeight="2dp"
+        android:minHeight="2dp"
+        android:progress="30"
+        android:progressDrawable="@drawable/progress_bar_background"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/plantTypeTextView" />
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/plantInfoPlantImageView" />
 
     <ImageView
         android:id="@+id/waterImageView"
-        android:layout_width="115dp"
-        android:layout_height="97dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="71dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginBottom="8dp"
         android:clickable="true"
         android:onClick="water"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/waterdropblue" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="115dp"
-        android:layout_height="97dp"
-        android:layout_marginStart="71dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="130dp"
+        android:layout_marginBottom="8dp"
         android:clickable="true"
         android:onClick="delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/waterImageView"
         app:srcCompat="@drawable/cancel" />
-
-    <ImageView
-        android:id="@+id/plantInfoPlantImageView"
-        android:layout_width="250dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/waterImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/waterLevelProgressBar"
-        app:srcCompat="@drawable/plant" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="76dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="3dp"
         android:text="Water level :"
         android:textAllCaps="false"
-        android:textColor="#212121"
+        android:textColor="@color/colorPrimary"
         android:textIsSelectable="false"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/waterLevelProgressBar"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/waterLevelProgressBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plantInfoPlantImageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

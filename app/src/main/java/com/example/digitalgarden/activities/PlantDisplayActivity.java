@@ -63,8 +63,8 @@ public class PlantDisplayActivity extends AppCompatActivity {
         plantPicture = findViewById(R.id.plantInfoPlantImageView);
 
         waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel());
-        plantName.setText("Name: " + MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
-        plantType.setText("Type: " + MainActivity.plants.get(getIntent().getExtras().getInt("position")).getType());
+        plantName.setText(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
+        plantType.setText(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getType());
         plantPicture.setImageBitmap(getPlantImage(getIntent().getExtras().getInt("position")));
 
         waterLevelProgress.setScaleY(6f);//Bulks up the water progress bar.

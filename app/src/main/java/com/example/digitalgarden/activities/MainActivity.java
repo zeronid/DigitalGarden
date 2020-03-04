@@ -40,16 +40,6 @@ public class MainActivity extends AppCompatActivity {
         plantList = findViewById(R.id.recyclerView);
         updateList();
         checkDate();
-
-        //Called when you click on a plant
-//        plantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent goToPlantInfo = new Intent(getApplicationContext(), PlantDisplayActivity.class);
-//                goToPlantInfo.putExtra("position",position);
-//                startActivity(goToPlantInfo);
-//            }
-//        });
     }
 
     //The add plant method that is called when create plant button is pressed.
