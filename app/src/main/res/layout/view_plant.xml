@@ -4,7 +4,7 @@
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="250dp"
-    android:background="#512DA8"
+    android:background="@color/brownContrast"
     android:padding="1dp">
 
 
@@ -39,6 +39,7 @@
         android:layout_alignRight="@id/plantImage"
         android:layout_alignBottom="@id/plantImage"
         android:layout_marginBottom="15dp"
+        android:textSize="20sp"
         android:gravity="bottom"
         android:text="Name"
         android:textColor="#FFFFFF"
@@ -47,8 +48,8 @@
 
     <ImageView
         android:id="@+id/colorCircle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:contentDescription="Plant_Image"
         android:src="@drawable/waterdropblue"
         android:layout_alignBottom="@id/plantImage"

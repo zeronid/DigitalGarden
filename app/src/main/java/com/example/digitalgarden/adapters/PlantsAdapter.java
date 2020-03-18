@@ -22,77 +22,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
-//public class PlantsAdapter extends RecyclerView.Adapter {
-//    Context context;
-//    ArrayList<Plant> plants;
-//
-//    @NonNull
-//    @Override
-//    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View view = mInflater.inflate(R.layout.recyclerview_item, parent, false);
-//        return new ViewHolder(view);
-//    }
-//
-//    public PlantsAdapter(Context c, ArrayList<Plant> plants){
-//        super(c, R.layout.view_plant,R.id.textView1,plants);
-//        this.context = c;
-//        this.plants = plants;
-//    }
-//
-//    @NonNull
-//    @Override
-//    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        LayoutInflater layoutInflater =(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View row = layoutInflater.inflate(R.layout.view_plant,parent,false);
-//        TextView textName = row.findViewById(R.id.textView1);
-//        TextView textType = row.findViewById(R.id.textView2);
-//        ImageView dropImage = row.findViewById(R.id.colorCircle);
-//        ImageView plantImage = row.findViewById(R.id.plantImage);
-//
-//
-//        plantImage.setImageBitmap(getPlantImage(position));
-//        textName.setText(plants.get(position).getName());
-//        textType.setText(plants.get(position).getType());
-//        dropImage.setImageResource(R.drawable.waterdropblue);
-//        if(MainActivity.plants.get(position).getWaterLevel() <= 50){
-//            dropImage.setImageResource(R.drawable.waterdropyellow);
-//        } if (MainActivity.plants.get(position).getWaterLevel() <= 25){
-//            dropImage.setImageResource(R.drawable.waterdropred);
-//        }
-//
-//
-//
-//        return row;
-//    }
-//
-//    private Bitmap getPlantImage(int pos){
-//        if(MainActivity.plants.get(pos).getPlantImage() == -1) {
-//            Bitmap bitMap = BitmapFactory.decodeResource(this.context.getResources(),R.drawable.plant);
-//            return bitMap;
-//        }
-//        File f = new File(context.getFilesDir(),MainActivity.plants.get(pos).getPlantImage() +".png");
-//        Bitmap b = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.plant);
-//        try {
-//            b = BitmapFactory.decodeStream(new FileInputStream(f));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return b;
-//    }
-//}
-
-
 public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder> {
 
-    private ArrayList<String> plantList;
+    private ArrayList<Plant> plants;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     Context context;
 
     // data is passed into the constructor
-    public PlantsAdapter(Context context, ArrayList<String> data) {
+    public PlantsAdapter(Context context, ArrayList<Plant> data) {
         this.mInflater = LayoutInflater.from(context);
-        this.plantList = data;
+        this.plants = data;
         this.context = context;
     }
 
@@ -121,7 +61,7 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
     // total number of cells
     @Override
     public int getItemCount() {
-        return plantList.size();
+        return plants.size();
     }
 
 
@@ -149,8 +89,8 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
-        return plantList.get(id);
+    Plant getItem(int id) {
+        return plants.get(id);
     }
 
     // allows clicks events to be caught

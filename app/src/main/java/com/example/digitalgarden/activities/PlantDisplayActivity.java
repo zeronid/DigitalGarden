@@ -3,6 +3,7 @@ package com.example.digitalgarden.activities;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,7 +45,9 @@ public class PlantDisplayActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                                 MainActivity.plantNames.remove(getIntent().getExtras().getInt("position"));
                                 MainActivity.plants.remove(getIntent().getExtras().getInt("position"));
-                                deleteImage(getIntent().getExtras().getInt("position"));
+                                if(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage() != -1) {
+                                    deleteImage(getIntent().getExtras().getInt("position"));
+                                }
                                 finish();//Very important,when you press "Yes" finish the activity.
                     }
                 }).setNegativeButton(android.R.string.no,null).
@@ -87,9 +90,8 @@ public class PlantDisplayActivity extends AppCompatActivity {
     }
 
     private void deleteImage(int pos){
-        File dir = getFilesDir();
-        File file = new File(dir, MainActivity.plants.get(pos).getPlantImage() + ".png");
-        file.delete();
+            File file = new File(getFilesDir() + "/" + MainActivity.plants.get(pos).getPlantImage());
+            file.delete();
     }
 
 }
