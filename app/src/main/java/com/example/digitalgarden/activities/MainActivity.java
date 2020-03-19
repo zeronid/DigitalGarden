@@ -1,6 +1,7 @@
 package com.example.digitalgarden.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,12 +20,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
+
     //An array list for plant objects and one for the names only.
     public static ArrayList<String> plantNames = new ArrayList<>();
     public static ArrayList<Plant> plants = new ArrayList<>();
     public RecyclerView plantList;
     final int NUMOFCOLUMNS = 2;
-
+    private Toolbar toolbar;
 
 
     @Override
@@ -38,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         plantList = findViewById(R.id.recyclerView);
         updateList();
         checkDate();
+
+        toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("My Plants");
     }
 
     @Override

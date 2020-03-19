@@ -1,13 +1,16 @@
 package com.example.digitalgarden.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -64,6 +67,10 @@ public class PlantDisplayActivity extends AppCompatActivity {
         plantName = findViewById(R.id.plantNameTextView);
         plantType = findViewById(R.id.plantTypeTextView);
         plantPicture = findViewById(R.id.plantInfoPlantImageView);
+        Toolbar toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel());
         plantName.setText(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
@@ -94,4 +101,11 @@ public class PlantDisplayActivity extends AppCompatActivity {
             file.delete();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            PlantDisplayActivity.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

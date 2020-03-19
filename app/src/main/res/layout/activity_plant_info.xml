@@ -7,11 +7,20 @@
     android:background="@color/colorPrimaryDark"
     android:layout_gravity="center"
     tools:context=".activities.PlantDisplayActivity">
+    
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:titleTextColor="@color/brownContrast">
+    </androidx.appcompat.widget.Toolbar>
 
     <ImageView
         android:id="@+id/plantInfoPlantImageView"
         android:layout_width="0dp"
         android:layout_height="400dp"
+        android:layout_marginTop="55dp"
         android:foreground="@drawable/gradient"
         android:padding="1dp"
         android:scaleType="fitXY"

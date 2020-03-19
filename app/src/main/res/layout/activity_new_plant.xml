@@ -6,24 +6,32 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     tools:context=".activities.CreatePlantActivity">
+    
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:titleTextColor="@color/brownContrast">
+    </androidx.appcompat.widget.Toolbar>
 
     <EditText
         android:id="@+id/newPlantNameEditText"
-        style="@style/Widget.AppCompat.AutoCompleteTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="50dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/edit_text_rounded"
         android:ems="10"
         android:hint="@string/plant_name"
         android:inputType="textPersonName"
         android:textColor="#212121"
+        android:textColorHint="@color/brownContrast"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/toolbar" />
 
     <AutoCompleteTextView
         android:id="@+id/newPlantTypeEditText"
@@ -32,11 +40,12 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="50dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/edit_text_rounded"
         android:completionHint="Please select the type of your plant"
         android:completionThreshold="1"
         android:hint="@string/plant_type"
         android:textColor="#212121"
+        android:textColorHint="@color/brownContrast"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,10 +89,10 @@
         android:id="@+id/uploadImageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="20dp"
         android:text="@string/upload_image"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/brownContrast"
         app:layout_constraintBottom_toTopOf="@+id/plantImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

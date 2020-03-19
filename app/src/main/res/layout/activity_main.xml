@@ -7,10 +7,20 @@
     android:background="@color/colorPrimary"
     tools:context=".activities.MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        app:titleTextColor="@color/brownContrast">
+    </androidx.appcompat.widget.Toolbar>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
         android:layout_marginBottom="100dp"
         android:background="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"

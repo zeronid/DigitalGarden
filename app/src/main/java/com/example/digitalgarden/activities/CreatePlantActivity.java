@@ -1,7 +1,9 @@
 package com.example.digitalgarden.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
@@ -13,6 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -39,6 +42,11 @@ public class CreatePlantActivity extends AppCompatActivity {
         AutoCompleteTextView typeView = findViewById(R.id.newPlantTypeEditText);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,TYPES);
         typeView.setAdapter(adapter);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("New Plant");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void makePlant(View view){
@@ -99,4 +107,11 @@ public class CreatePlantActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            CreatePlantActivity.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
