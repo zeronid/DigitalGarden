@@ -54,7 +54,12 @@ public class CreatePlantActivity extends AppCompatActivity {
         plantPicture = findViewById(R.id.plantImageView);
         AutoCompleteTextView newPlantType = findViewById(R.id.newPlantTypeEditText);
         Bitmap plantBitmap = ((BitmapDrawable)plantPicture.getDrawable()).getBitmap();
-        int plantPictureNumber = saveImageToInternalStorage(plantBitmap);
+        int plantPictureNumber;
+        if(plantPicture.getDrawable() == (getResources().getDrawable(R.drawable.plant))){
+            plantPictureNumber = -1;
+        } else {
+            plantPictureNumber = saveImageToInternalStorage(plantBitmap);
+        }
         if(MainActivity.plantNames.contains(newPlantName.getText().toString())){
             Toast.makeText(this, "This name is already taken", Toast.LENGTH_SHORT).show();
         } else {
@@ -87,16 +92,6 @@ public class CreatePlantActivity extends AppCompatActivity {
     public int saveImageToInternalStorage(Bitmap image) {
         try {
             int imageNumber = (int)(Math.random()*100000);
-            boolean uniqueNumber = false;
-            while (uniqueNumber = false) {
-                for (int i = 0; i < MainActivity.plants.size(); i++) {
-                    if (MainActivity.plants.get(i).getPlantImage() == imageNumber) {
-                        imageNumber = (int) (Math.random() * 100000);
-                        break;
-                    }
-                    uniqueNumber = true;
-                }
-            }
             FileOutputStream fos = openFileOutput(imageNumber + ".png", Context.MODE_PRIVATE);
             image.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();

@@ -67,6 +67,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
         plantName = findViewById(R.id.plantNameTextView);
         plantType = findViewById(R.id.plantTypeTextView);
         plantPicture = findViewById(R.id.plantInfoPlantImageView);
+
         Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
@@ -97,7 +98,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
     }
 
     private void deleteImage(int pos){
-            File file = new File(getFilesDir() + "/" + MainActivity.plants.get(pos).getPlantImage());
+            File file = new File(getFilesDir() + "/" + MainActivity.plants.get(pos).getPlantImage() + ".png");
             file.delete();
     }
 
