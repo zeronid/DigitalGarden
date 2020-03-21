@@ -4,7 +4,7 @@
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="250dp"
-    android:background="@color/brownContrast"
+    android:background="@color/colorPrimaryDark"
     android:padding="1dp">
 
 
@@ -14,7 +14,9 @@
         android:layout_height="match_parent"
         android:contentDescription="Plant_Image"
         android:scaleType="fitXY"
-        android:foreground="@drawable/gradient"/>
+        android:foreground="@drawable/gradient"
+        android:layout_margin="1dp"
+        android:padding="1dp"/>
 
 
     <TextView
@@ -28,6 +30,7 @@
         android:layout_margin="1dp"
         android:gravity="bottom"
         android:text="Type"
+        android:textStyle="bold"
         android:textColor="#FFFFFF"
         />
     <TextView
@@ -42,6 +45,7 @@
         android:textSize="20sp"
         android:gravity="bottom"
         android:text="Name"
+        android:textStyle="bold"
         android:textColor="#FFFFFF"
         />
 

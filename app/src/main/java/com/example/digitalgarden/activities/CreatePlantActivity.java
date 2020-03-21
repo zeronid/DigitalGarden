@@ -62,8 +62,11 @@ public class CreatePlantActivity extends AppCompatActivity {
         }
         if(MainActivity.plantNames.contains(newPlantName.getText().toString())){
             Toast.makeText(this, "This name is already taken", Toast.LENGTH_SHORT).show();
-        } else {
-            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), 35,plantPictureNumber);
+        }else if(newPlantName.getText().toString().equals("")){
+            Toast.makeText(this, "Please choose a name", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), 100,plantPictureNumber);
             MainActivity.plants.add(plant);
             MainActivity.plantNames.add(newPlantName.getText().toString());
             finish();
