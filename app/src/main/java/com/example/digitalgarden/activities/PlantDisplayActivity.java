@@ -46,11 +46,11 @@ public class PlantDisplayActivity extends AppCompatActivity {
                 setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                MainActivity.plantNames.remove(getIntent().getExtras().getInt("position"));
-                                MainActivity.plants.remove(getIntent().getExtras().getInt("position"));
                                 if(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage() != -1) {
                                     deleteImage(getIntent().getExtras().getInt("position"));
                                 }
+                                MainActivity.plantNames.remove(getIntent().getExtras().getInt("position"));
+                                MainActivity.plants.remove(getIntent().getExtras().getInt("position"));
                                 finish();//Very important,when you press "Yes" finish the activity.
                     }
                 }).setNegativeButton(android.R.string.no,null).
