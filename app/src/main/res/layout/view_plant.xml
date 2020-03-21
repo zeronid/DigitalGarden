@@ -4,8 +4,8 @@
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="250dp"
-    android:background="@color/colorPrimaryDark"
-    android:padding="1dp">
+    android:background="@android:color/black"
+    android:layout_margin="0.5dp">
 
 
     <ImageView
@@ -15,8 +15,8 @@
         android:contentDescription="Plant_Image"
         android:scaleType="fitXY"
         android:foreground="@drawable/gradient"
-        android:layout_margin="1dp"
-        android:padding="1dp"/>
+        android:layout_margin="0.5dp"
+        android:padding="0.3dp"/>
 
 
     <TextView

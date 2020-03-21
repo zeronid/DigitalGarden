@@ -1,15 +1,23 @@
 package com.example.digitalgarden.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +29,9 @@ import com.example.digitalgarden.R;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class PlantDisplayActivity extends AppCompatActivity {
 
@@ -108,5 +119,66 @@ public class PlantDisplayActivity extends AppCompatActivity {
             PlantDisplayActivity.this.finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void changePicture(View view){
+        new AlertDialog.Builder(this).
+                setTitle("Change picture").
+                setMessage("Do you want to change the plant's picture?").
+                setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        takePicture();
+                    }
+                }).setNegativeButton(android.R.string.no,null).
+                setIcon(android.R.drawable.alert_light_frame)
+                .show();
+    }
+
+    public void takePicture(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{
+                    Manifest.permission.CAMERA
+            },100);
+        }
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent,100);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode==100){
+            Bitmap captureImage = (Bitmap) data.getExtras().get("data");
+            plantPicture = findViewById(R.id.plantInfoPlantImageView);
+            plantPicture.setImageBitmap(captureImage);
+        }
+    }
+
+    public void changePlantsImageInStorage(Bitmap image){
+        FileOutputStream fos = null;
+        try {
+            fos = openFileOutput(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage() + ".png", Context.MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        try {
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        plantPicture = findViewById(R.id.plantInfoPlantImageView);
+        Bitmap plantBitmap = ((BitmapDrawable)plantPicture.getDrawable()).getBitmap();
+        changePlantsImageInStorage(plantBitmap);
+        super.onDestroy();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
     }
 }

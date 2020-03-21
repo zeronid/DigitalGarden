@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+
         updateList();
         checkDate();
         super.onResume();
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         plantList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -130,4 +132,5 @@ public class MainActivity extends AppCompatActivity {
         saveData();
         super.onDestroy();
     }
+
 }
