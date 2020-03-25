@@ -1,6 +1,7 @@
 package com.example.digitalgarden.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.digitalgarden.models.Plant;
@@ -18,15 +21,17 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     //An array list for plant objects and one for the names only.
     public static ArrayList<String> plantNames = new ArrayList<>();
     public static ArrayList<Plant> plants = new ArrayList<>();
-    public RecyclerView plantList;
+    private RecyclerView plantList;
     final int NUMOFCOLUMNS = 2;
     private Toolbar toolbar;
+    PlantsAdapter adapter;
 
 
     @Override
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("My Plants");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("My Plants");
     }
 
     @Override
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateList(){
         plantList = findViewById(R.id.recyclerView);
         plantList.setLayoutManager(new GridLayoutManager(this, NUMOFCOLUMNS));
-        PlantsAdapter adapter = new PlantsAdapter(this, plants);
+        adapter = new PlantsAdapter(this, plants);
         adapter.setClickListener(new PlantsAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -133,4 +138,24 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        MenuItem menuItem = menu.findItem(R.id.search_icon);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Seach here");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
 }

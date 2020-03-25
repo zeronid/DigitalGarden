@@ -6,14 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
     tools:context=".activities.CreatePlantActivity">
-    
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:titleTextColor="@color/brownContrast">
-    </androidx.appcompat.widget.Toolbar>
+        app:titleTextColor="@color/brownContrast"></androidx.appcompat.widget.Toolbar>
 
     <EditText
         android:id="@+id/newPlantNameEditText"
@@ -24,12 +23,12 @@
         android:layout_marginEnd="50dp"
         android:background="@drawable/edit_text_rounded"
         android:ems="10"
+        android:gravity="center"
         android:hint="@string/plant_name"
         android:inputType="textPersonName"
         android:textColor="#212121"
         android:textColorHint="@android:color/white"
         android:textSize="10sp"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,10 +44,10 @@
         android:background="@drawable/edit_text_rounded"
         android:completionHint="Please select the type of your plant"
         android:completionThreshold="1"
+        android:gravity="center"
         android:hint="@string/plant_type"
         android:textColor="#212121"
         android:textColorHint="@android:color/white"
-        android:gravity="center"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -77,13 +76,12 @@
         android:layout_width="171dp"
         android:layout_height="190dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="170dp"
         android:background="#C0C0C0"
         android:clickable="true"
         android:onClick="takePicture"
         android:padding="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/uploadImageTextView"
         app:srcCompat="@drawable/plant"
@@ -93,15 +91,33 @@
         android:id="@+id/uploadImageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="40dp"
         android:text="@string/upload_image"
         android:textColor="@color/brownContrast"
         android:textSize="23sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/plantImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plantsNoteEditText" />
+
+    <EditText
+        android:id="@+id/plantsNoteEditText"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="56dp"
+        android:background="@drawable/edit_text_rounded"
+        android:backgroundTint="@color/colorPrimary"
+        android:ems="10"
+        android:gravity="start"
+        android:hint="Add a note about your plant"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newPlantTypeEditText" />
 

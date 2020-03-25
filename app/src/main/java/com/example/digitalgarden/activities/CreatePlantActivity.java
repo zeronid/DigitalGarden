@@ -31,7 +31,7 @@ import java.io.FileOutputStream;
 public class CreatePlantActivity extends AppCompatActivity {
 
     private static final String[] TYPES = new String[]{"Succulent","Cactus","Moss","Embryophyte"};
-    private EditText newPlantName;
+    private EditText newPlantName,plantsNote;
     private ImageView plantPicture;
 
     @Override
@@ -54,6 +54,7 @@ public class CreatePlantActivity extends AppCompatActivity {
         plantPicture = findViewById(R.id.plantImageView);
         AutoCompleteTextView newPlantType = findViewById(R.id.newPlantTypeEditText);
         Bitmap plantBitmap = ((BitmapDrawable)plantPicture.getDrawable()).getBitmap();
+        plantsNote = findViewById(R.id.plantsNoteEditText);
         int plantPictureNumber;
         if(plantPicture.getDrawable() == (getResources().getDrawable(R.drawable.plant))){
             plantPictureNumber = -1;
@@ -66,7 +67,7 @@ public class CreatePlantActivity extends AppCompatActivity {
             Toast.makeText(this, "Please choose a name", Toast.LENGTH_SHORT).show();
         }
         else {
-            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), 100,plantPictureNumber);
+            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), 100,plantPictureNumber,plantsNote.getText().toString());
             MainActivity.plants.add(plant);
             MainActivity.plantNames.add(newPlantName.getText().toString());
             finish();
@@ -85,11 +86,12 @@ public class CreatePlantActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode==100){
+        if (requestCode == 100) {
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
             plantPicture = findViewById(R.id.plantImageView);
             plantPicture.setImageBitmap(captureImage);
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public int saveImageToInternalStorage(Bitmap image) {
