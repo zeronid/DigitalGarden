@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.digitalgarden.models.Plant;
@@ -30,23 +31,42 @@ import java.io.FileOutputStream;
 
 public class CreatePlantActivity extends AppCompatActivity {
 
+    //Plant types --- need to add alot more.
     private static final String[] TYPES = new String[]{"Succulent","Cactus","Moss","Embryophyte"};
+
     private EditText newPlantName,plantsNote;
     private ImageView plantPicture;
+    private Spinner lastWateredSpinner , waterFrequencySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_plant);
+        setContentView(R.layout.activity_create_plant);
 
+        //Sets the types of plants into the typeView.
         AutoCompleteTextView typeView = findViewById(R.id.newPlantTypeEditText);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,TYPES);
         typeView.setAdapter(adapter);
 
+        //Initiates the toolbar with the title and back button.
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("New Plant");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Sets the last watered spinner options.
+        lastWateredSpinner = findViewById(R.id.lastWateredSpinner);
+        String[] lastWateredSpinnerOptions = {"1","2","3","4","5","6","7"};
+        ArrayAdapter<String> wateredSpinnerArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,lastWateredSpinnerOptions);
+        wateredSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        lastWateredSpinner.setAdapter(wateredSpinnerArrayAdapter);
+
+        //Sets the watering frequency spinner options.
+        waterFrequencySpinner = findViewById(R.id.waterFrequencySpinner);
+        String[] waterFrequencySpinnerOptions = {"1","2","3","4","5","6","7","8","9","10"};
+        ArrayAdapter<String> waterFrequencyArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,waterFrequencySpinnerOptions);
+        wateredSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        waterFrequencySpinner.setAdapter(waterFrequencyArrayAdapter);
     }
 
     public void makePlant(View view){

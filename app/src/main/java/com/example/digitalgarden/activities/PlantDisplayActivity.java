@@ -31,7 +31,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class PlantDisplayActivity extends AppCompatActivity {
 
@@ -71,7 +70,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plant_info);
+        setContentView(R.layout.activity_plant_display);
 
         //Setting up the Views.
         waterLevelProgress = findViewById(R.id.waterLevelProgressBar);

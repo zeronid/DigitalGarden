@@ -12,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/brownContrast"></androidx.appcompat.widget.Toolbar>
 
     <EditText
@@ -91,7 +93,7 @@
         android:id="@+id/uploadImageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="70dp"
         android:text="@string/upload_image"
         android:textColor="@color/brownContrast"
         android:textSize="23sp"
@@ -104,7 +106,7 @@
     <EditText
         android:id="@+id/plantsNoteEditText"
         android:layout_width="300dp"
-        android:layout_height="150dp"
+        android:layout_height="130dp"
         android:layout_margin="10dp"
         android:layout_marginStart="55dp"
         android:layout_marginTop="60dp"
@@ -120,5 +122,51 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newPlantTypeEditText" />
+
+    <TextView
+        android:id="@+id/lastWateredTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="10dp"
+        android:text="Last watered"
+        android:textColor="@color/brownContrast"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plantsNoteEditText" />
+
+    <TextView
+        android:id="@+id/wateringFrequencyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="70dp"
+        android:text="Watering frequency"
+        android:textStyle="bold"
+        android:textColor="@color/brownContrast"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plantsNoteEditText" />
+
+    <Spinner
+        android:id="@+id/lastWateredSpinner"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/brownContrast"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lastWateredTextView" />
+
+    <Spinner
+        android:id="@+id/waterFrequencySpinner"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="70dp"
+        android:backgroundTint="@color/brownContrast"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wateringFrequencyTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
