@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(today != lastTimeStarted){
             for(int i=0;i<plants.size();i++){
-                plants.get(i).setWaterLevel(plants.get(i).getWaterLevel()-10);
+                plants.get(i).setWaterLevel(plants.get(i).getCurrentWater()-1);
             }
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt("lastTimeStarted", today);

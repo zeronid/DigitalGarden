@@ -56,14 +56,14 @@ public class CreatePlantActivity extends AppCompatActivity {
 
         //Sets the last watered spinner options.
         lastWateredSpinner = findViewById(R.id.lastWateredSpinner);
-        String[] lastWateredSpinnerOptions = {"1","2","3","4","5","6","7"};
+        String[] lastWateredSpinnerOptions = {"1 Day","2 Days","3 Days","4 Days","5 Days","6 Days","7 Days"};
         ArrayAdapter<String> wateredSpinnerArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,lastWateredSpinnerOptions);
         wateredSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         lastWateredSpinner.setAdapter(wateredSpinnerArrayAdapter);
 
         //Sets the watering frequency spinner options.
         waterFrequencySpinner = findViewById(R.id.waterFrequencySpinner);
-        String[] waterFrequencySpinnerOptions = {"1","2","3","4","5","6","7","8","9","10"};
+        String[] waterFrequencySpinnerOptions = {"1 Day","2 Days","3 Days","4 Days","5 Days","6 Days","7 Days","8 Days","9 Days"};
         ArrayAdapter<String> waterFrequencyArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,waterFrequencySpinnerOptions);
         wateredSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         waterFrequencySpinner.setAdapter(waterFrequencyArrayAdapter);
@@ -75,25 +75,39 @@ public class CreatePlantActivity extends AppCompatActivity {
         AutoCompleteTextView newPlantType = findViewById(R.id.newPlantTypeEditText);
         Bitmap plantBitmap = ((BitmapDrawable)plantPicture.getDrawable()).getBitmap();
         plantsNote = findViewById(R.id.plantsNoteEditText);
+
+        //Get the last watered value
+        lastWateredSpinner = findViewById(R.id.lastWateredSpinner);
+        int lastWateredSpinnerIntegerValue = Integer.parseInt(String.valueOf(lastWateredSpinner.getSelectedItem().toString().charAt(0)));
+
+        //Get the water frequency value
+        waterFrequencySpinner = findViewById(R.id.waterFrequencySpinner);
+        int waterFrequencySpinnerIntegerValue = Integer.parseInt(String.valueOf(waterFrequencySpinner.getSelectedItem().toString().charAt(0)));
+
+        //Get the plant picture
         int plantPictureNumber;
         if(plantPicture.getDrawable() == (getResources().getDrawable(R.drawable.plant))){
             plantPictureNumber = -1;
         } else {
             plantPictureNumber = saveImageToInternalStorage(plantBitmap);
         }
+
+        //Display errors if the name is invalid
         if(MainActivity.plantNames.contains(newPlantName.getText().toString())){
             Toast.makeText(this, "This name is already taken", Toast.LENGTH_SHORT).show();
         }else if(newPlantName.getText().toString().equals("")){
             Toast.makeText(this, "Please choose a name", Toast.LENGTH_SHORT).show();
-        }
+        } //Create the plant and push it to the plants arrayList
         else {
-            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), 100,plantPictureNumber,plantsNote.getText().toString());
+            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue , lastWateredSpinnerIntegerValue,plantPictureNumber,plantsNote.getText().toString());
             MainActivity.plants.add(plant);
             MainActivity.plantNames.add(newPlantName.getText().toString());
             finish();
         }
     }
 
+
+    //The function that takes a picture of the plant
     public void takePicture(View view){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{
@@ -104,6 +118,7 @@ public class CreatePlantActivity extends AppCompatActivity {
         startActivityForResult(intent,100);
     }
 
+    //The function that sets the picture taken to the ImageView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 100) {
@@ -114,6 +129,7 @@ public class CreatePlantActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    //The function that saves the image to the internal storage and sets the number of the picture to the plant.
     public int saveImageToInternalStorage(Bitmap image) {
         try {
             int imageNumber = (int)(Math.random()*100000);
@@ -127,6 +143,7 @@ public class CreatePlantActivity extends AppCompatActivity {
         }
     }
 
+    //The function that sets the back button so it finishes the activity.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==android.R.id.home){

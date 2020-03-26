@@ -35,16 +35,22 @@ import java.io.FileOutputStream;
 public class PlantDisplayActivity extends AppCompatActivity {
 
     public static ProgressBar waterLevelProgress;
-    public TextView plantName, plantType, plantNote;
+    public TextView plantName, plantType, plantNote , waterLevelTextView;
     public ImageView plantPicture;
 
 
     //Water a plant with the water button
     public void water(View view){
+        //Sets the progress bar to 100%
         waterLevelProgress = findViewById(R.id.waterLevelProgressBar);
-        waterLevelProgress.setProgress(100);
-        MainActivity.plants.get(getIntent().getExtras().getInt("position")).water();//Calls the Water Plant method of the Plant Class
+        waterLevelProgress.setMax(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel());
+        waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel() * 10);
+        MainActivity.plants.get(getIntent().getExtras().getInt("position")).water();
+        //Displays a toast that notifies the user about the watering.
         Toast.makeText(this, MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName() + "'s water is now at 100%!", Toast.LENGTH_SHORT).show();
+        //Updates the text that display the percentage of the water
+        waterLevelTextView = findViewById(R.id.waterLevelTextView);
+        waterLevelTextView.setText("Water level : " + 100 + "%");
     }
 
     //Delete an entry with the delete button
@@ -78,6 +84,14 @@ public class PlantDisplayActivity extends AppCompatActivity {
         plantType = findViewById(R.id.plantTypeTextView);
         plantPicture = findViewById(R.id.plantInfoPlantImageView);
         plantNote = findViewById(R.id.plantsNoteTextView);
+        waterLevelTextView = findViewById(R.id.waterLevelTextView);
+
+        //Setting up the text in the water level text view
+        double currentWater = MainActivity.plants.get(getIntent().getExtras().getInt("position")).getCurrentWater() * 10;
+        double totalWater = MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel() * 10;
+        double waterLevelDouble = currentWater / totalWater * 100;
+        int waterLevellnt = (int) waterLevelDouble;
+        waterLevelTextView.setText("Water level : " + waterLevellnt + "%");
 
         //Setting up the toolbar
         Toolbar toolbar = findViewById(R.id.toolBar);
@@ -86,7 +100,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Setting up the Water Level Bar.
-        waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel());
+        waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getCurrentWater() * 10  / MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel() * 10);
         waterLevelProgress.setScaleY(6f);//Bulks up the water progress bar.
 
         //Setting up the name.

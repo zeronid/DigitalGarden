@@ -98,7 +98,7 @@
         app:srcCompat="@drawable/waterdropblue" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/deleteButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="130dp"
@@ -110,16 +110,16 @@
         app:srcCompat="@drawable/cancel" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/waterLevelTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:alpha="0.5"
+        android:alpha="0.8"
+        android:gravity="center"
         android:text="Water level "
         android:textAllCaps="false"
-        android:textColor="@android:color/background_light"
+        android:textColor="@android:color/white"
         android:textIsSelectable="false"
         android:textSize="10sp"
-        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/waterLevelProgressBar"
         app:layout_constraintEnd_toEndOf="@id/waterLevelProgressBar"
         app:layout_constraintHorizontal_bias="0.5"

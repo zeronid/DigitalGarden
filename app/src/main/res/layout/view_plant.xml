@@ -56,7 +56,7 @@
         android:layout_height="40dp"
         android:contentDescription="Plant_Image"
         android:src="@drawable/waterdropblue"
-        android:layout_alignBottom="@id/plantImage"
+        android:layout_alignTop="@id/plantImage"
         android:layout_alignRight="@id/plantImage"
         />
 

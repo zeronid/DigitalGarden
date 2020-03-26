@@ -52,9 +52,9 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
         holder.name.setText(MainActivity.plantNames.get(position));
         holder.type.setText(MainActivity.plants.get(position).getType());
         holder.drop.setImageResource(R.drawable.waterdropblue);
-        if(MainActivity.plants.get(position).getWaterLevel() <= 50){
+        if(MainActivity.plants.get(position).getCurrentWater() * 10 / MainActivity.plants.get(position).getWaterLevel() * 10 <= 50){
             holder.drop.setImageResource(R.drawable.waterdropyellow);
-        } if (MainActivity.plants.get(position).getWaterLevel() <= 25){
+        } if (MainActivity.plants.get(position).getCurrentWater() * 10 / MainActivity.plants.get(position).getWaterLevel() * 10 <= 25){
             holder.drop.setImageResource(R.drawable.waterdropred);
         }
         holder.picture.setImageBitmap(getPlantImage(position));
