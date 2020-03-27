@@ -112,7 +112,7 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
     }
 
     private Bitmap getPlantImage(int pos){
-        if(MainActivity.plants.get(pos).getPlantImage() == -1) {
+        if(MainActivity.plants.get(pos).getPlantImage() =="1") {
             Bitmap bitMap = BitmapFactory.decodeResource(this.context.getResources(),R.drawable.plant);
             return bitMap;
         }

@@ -3,13 +3,14 @@ package com.example.digitalgarden.models;
 public class Plant {
 
     private String name,type,note;
-    private int waterLevel , currentWater , imageNumber;
+    private int waterLevel , currentWater;
+    private String imageStringUUID;
 
-    public Plant(String name,String type,int waterLevel,int currentWater, int imageNumber,String note){
+    public Plant(String name,String type,int waterLevel,int currentWater, String imageStringUUID,String note){
         setName(name);
         setType(type);
         setWaterLevel(waterLevel);
-        setPlantImage(imageNumber);
+        setPlantImage(imageStringUUID);
         setNote(note);
         setCurrentWater(currentWater);
     }
@@ -36,8 +37,8 @@ public class Plant {
     public void setWaterLevel(int waterLevel){
         this.waterLevel = waterLevel;
     }
-    public int getPlantImage(){return this.imageNumber;}
-    public void setPlantImage(int image){this.imageNumber = image;}
+    public String getPlantImage(){return this.imageStringUUID;}
+    public void setPlantImage(String image){this.imageStringUUID = image;}
     public String getNote() { return note; }
     public void setNote(String note){this.note = note;}
     public int getCurrentWater(){return this.currentWater;}

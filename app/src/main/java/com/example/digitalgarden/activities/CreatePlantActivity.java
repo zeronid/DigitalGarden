@@ -28,6 +28,7 @@ import com.example.digitalgarden.models.Plant;
 import com.example.digitalgarden.R;
 
 import java.io.FileOutputStream;
+import java.util.UUID;
 
 public class CreatePlantActivity extends AppCompatActivity {
 
@@ -85,11 +86,11 @@ public class CreatePlantActivity extends AppCompatActivity {
         int waterFrequencySpinnerIntegerValue = Integer.parseInt(String.valueOf(waterFrequencySpinner.getSelectedItem().toString().charAt(0)));
 
         //Get the plant picture
-        int plantPictureNumber;
+        String plantPictureUUID;
         if(plantPicture.getDrawable() == (getResources().getDrawable(R.drawable.plant))){
-            plantPictureNumber = -1;
+            plantPictureUUID = "1";
         } else {
-            plantPictureNumber = saveImageToInternalStorage(plantBitmap);
+            plantPictureUUID = saveImageToInternalStorage(plantBitmap);
         }
 
         //Display errors if the name is invalid
@@ -99,7 +100,7 @@ public class CreatePlantActivity extends AppCompatActivity {
             Toast.makeText(this, "Please choose a name", Toast.LENGTH_SHORT).show();
         } //Create the plant and push it to the plants arrayList
         else {
-            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue , lastWateredSpinnerIntegerValue,plantPictureNumber,plantsNote.getText().toString());
+            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue , lastWateredSpinnerIntegerValue,plantPictureUUID,plantsNote.getText().toString());
             MainActivity.plants.add(plant);
             MainActivity.plantNames.add(newPlantName.getText().toString());
             finish();
@@ -130,16 +131,16 @@ public class CreatePlantActivity extends AppCompatActivity {
     }
 
     //The function that saves the image to the internal storage and sets the number of the picture to the plant.
-    public int saveImageToInternalStorage(Bitmap image) {
+    public String saveImageToInternalStorage(Bitmap image) {
         try {
-            int imageNumber = (int)(Math.random()*100000);
-            FileOutputStream fos = openFileOutput(imageNumber + ".png", Context.MODE_PRIVATE);
+            String unique = UUID.randomUUID().toString();
+            FileOutputStream fos = openFileOutput(unique + ".png", Context.MODE_PRIVATE);
             image.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
-            return imageNumber;
+            return unique;
         } catch (Exception e) {
             Log.e("saveToInternalStorage()", e.getMessage());
-            return -1;
+            return "1";
         }
     }
 

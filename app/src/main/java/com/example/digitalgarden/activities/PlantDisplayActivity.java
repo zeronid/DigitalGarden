@@ -61,7 +61,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
                 setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                if(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage() != -1) {
+                                if(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage() != "1") {
                                     deleteImage(getIntent().getExtras().getInt("position"));
                                 }
                                 MainActivity.plantNames.remove(getIntent().getExtras().getInt("position"));
@@ -119,7 +119,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
     }
 
     private Bitmap getPlantImage(int pos){
-        if(MainActivity.plants.get(pos).getPlantImage() == -1) {
+        if(MainActivity.plants.get(pos).getPlantImage() == "1") {
             Bitmap bitMap = BitmapFactory.decodeResource(getResources(),R.drawable.plant);
             return bitMap;
         }

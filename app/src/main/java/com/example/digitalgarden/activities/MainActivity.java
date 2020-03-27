@@ -1,11 +1,13 @@
 package com.example.digitalgarden.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ import com.example.digitalgarden.R;
 import com.example.digitalgarden.adapters.PlantsAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(add);
     }
 
+    //Updates the listView
     private void updateList(){
         plantList = findViewById(R.id.recyclerView);
         plantList.setLayoutManager(new GridLayoutManager(this, NUMOFCOLUMNS));
@@ -120,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         int lastTimeStarted = settings.getInt("lastTimeStarted", -1);
         Calendar calendar = Calendar.getInstance();
-        int today = calendar.get(Calendar.DAY_OF_YEAR);
+        int today = LocalDate.now().getDayOfMonth();
 
         if(today != lastTimeStarted){
             for(int i=0;i<plants.size();i++){
@@ -143,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu,menu);
         MenuItem menuItem = menu.findItem(R.id.search_icon);
         SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Seach here");
+        searchView.setQueryHint("Search here");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -157,5 +162,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        new AlertDialog.Builder(this).
+                setTitle("Exit").
+                setMessage("Are you sure you want to Exit the application?").
+                setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onDestroy();
+                    }
+                }).setNegativeButton(android.R.string.no,null).
+                setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

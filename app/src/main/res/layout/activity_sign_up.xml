@@ -54,11 +54,11 @@
         app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
 
     <Button
-        android:id="@+id/signInButton"
+        android:id="@+id/signUpButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="sign in"
+        android:text="sign up"
         android:textColor="@android:color/white"
         android:backgroundTint="@color/brownContrast"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,14 +67,14 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
 
     <TextView
-        android:id="@+id/signUpTextView"
+        android:id="@+id/signInTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Not a user? sign up here!"
+        android:text="Already have an account? Sign in here!"
         android:textColor="@color/brownContrast"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signInButton" />
+        app:layout_constraintTop_toBottomOf="@+id/signUpButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
