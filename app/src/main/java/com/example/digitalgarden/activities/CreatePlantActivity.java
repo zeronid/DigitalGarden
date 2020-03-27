@@ -134,8 +134,8 @@ public class CreatePlantActivity extends AppCompatActivity {
     public String saveImageToInternalStorage(Bitmap image) {
         try {
             String unique = UUID.randomUUID().toString();
-            FileOutputStream fos = openFileOutput(unique + ".png", Context.MODE_PRIVATE);
-            image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            FileOutputStream fos = openFileOutput(unique + ".JPEG", Context.MODE_PRIVATE);
+            image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.close();
             return unique;
         } catch (Exception e) {

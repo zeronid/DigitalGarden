@@ -123,7 +123,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
             Bitmap bitMap = BitmapFactory.decodeResource(getResources(),R.drawable.plant);
             return bitMap;
         }
-        File f = new File(getFilesDir(),MainActivity.plants.get(pos).getPlantImage() + ".png");
+        File f = new File(getFilesDir(),MainActivity.plants.get(pos).getPlantImage() + ".JPEG");
         Bitmap b = BitmapFactory.decodeResource(getResources(),R.drawable.plant);
         try {
             b = BitmapFactory.decodeStream(new FileInputStream(f));
@@ -134,7 +134,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
     }
 
     private void deleteImage(int pos){
-            File file = new File(getFilesDir() + "/" + MainActivity.plants.get(pos).getPlantImage() + ".png");
+            File file = new File(getFilesDir() + "/" + MainActivity.plants.get(pos).getPlantImage() + ".JPEG");
             file.delete();
     }
 
@@ -183,7 +183,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
     public void changePlantsImageInStorage(Bitmap image){
         FileOutputStream fos = null;
         try {
-            fos = openFileOutput(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage() + ".png", Context.MODE_PRIVATE);
+            fos = openFileOutput(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage() + ".JPEG", Context.MODE_PRIVATE);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

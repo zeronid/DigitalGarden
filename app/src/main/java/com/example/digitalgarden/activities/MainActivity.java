@@ -143,40 +143,20 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
-        MenuItem menuItem = menu.findItem(R.id.search_icon);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Search here");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        new AlertDialog.Builder(this).
-                setTitle("Exit").
-                setMessage("Are you sure you want to Exit the application?").
-                setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        onDestroy();
-                    }
-                }).setNegativeButton(android.R.string.no,null).
-                setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main_menu,menu);
+//        MenuItem changeUserItem = menu.findItem(R.id.change_user);
+//        changeUserItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+//                intent.putExtra("changeUser",-1);
+//                startActivity(intent);
+//                finish();
+//                return false;
+//            }
+//        });
+//        return super.onCreateOptionsMenu(menu);
+//    }
 }

@@ -19,6 +19,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
 
     TextView appName, signUp , emailEditText, passwordEditText;
@@ -47,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser mFireBaseUser = mFirebaseAuth.getCurrentUser();
-                if(mFireBaseUser != null){
+                if(mFireBaseUser != null ){
                     Toast.makeText(LoginActivity.this, "You are logged in!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
                     LoginActivity.this.finish();

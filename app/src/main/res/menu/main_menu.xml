@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/search_icon"
+        android:id="@+id/change_user"
         android:title="Sort by"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/common_full_open_on_phone"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView">
+        app:actionViewClass="androidx.appcompat.widget.ActionMenuView">
     </item>
 
 </menu>

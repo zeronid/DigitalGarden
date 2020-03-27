@@ -116,7 +116,7 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
             Bitmap bitMap = BitmapFactory.decodeResource(this.context.getResources(),R.drawable.plant);
             return bitMap;
         }
-        File f = new File(context.getFilesDir(),MainActivity.plants.get(pos).getPlantImage() +".png");
+        File f = new File(context.getFilesDir(),MainActivity.plants.get(pos).getPlantImage() +".JPEG");
         Bitmap b = BitmapFactory.decodeResource(context.getApplicationContext().getResources(),R.drawable.plant);
         try {
             b = BitmapFactory.decodeStream(new FileInputStream(f));
