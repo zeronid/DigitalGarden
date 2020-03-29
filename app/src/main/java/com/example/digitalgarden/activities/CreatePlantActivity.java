@@ -6,13 +6,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,7 +34,14 @@ import android.widget.Toast;
 import com.example.digitalgarden.models.Plant;
 import com.example.digitalgarden.R;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class CreatePlantActivity extends AppCompatActivity {
@@ -38,6 +52,9 @@ public class CreatePlantActivity extends AppCompatActivity {
     private EditText newPlantName,plantsNote;
     private ImageView plantPicture;
     private Spinner lastWateredSpinner , waterFrequencySpinner;
+    private String currentImagePath = null;
+    private static final int IMAGE_REQUEST = 1;
+    private File imageFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,14 +102,6 @@ public class CreatePlantActivity extends AppCompatActivity {
         waterFrequencySpinner = findViewById(R.id.waterFrequencySpinner);
         int waterFrequencySpinnerIntegerValue = Integer.parseInt(String.valueOf(waterFrequencySpinner.getSelectedItem().toString().charAt(0)));
 
-        //Get the plant picture
-        String plantPictureUUID;
-        if(plantPicture.getDrawable() == (getResources().getDrawable(R.drawable.plant))){
-            plantPictureUUID = "1";
-        } else {
-            plantPictureUUID = saveImageToInternalStorage(plantBitmap);
-        }
-
         //Display errors if the name is invalid
         if(MainActivity.plantNames.contains(newPlantName.getText().toString())){
             Toast.makeText(this, "This name is already taken", Toast.LENGTH_SHORT).show();
@@ -100,47 +109,10 @@ public class CreatePlantActivity extends AppCompatActivity {
             Toast.makeText(this, "Please choose a name", Toast.LENGTH_SHORT).show();
         } //Create the plant and push it to the plants arrayList
         else {
-            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue , lastWateredSpinnerIntegerValue,plantPictureUUID,plantsNote.getText().toString());
+            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue , lastWateredSpinnerIntegerValue,currentImagePath,plantsNote.getText().toString());
             MainActivity.plants.add(plant);
             MainActivity.plantNames.add(newPlantName.getText().toString());
             finish();
-        }
-    }
-
-
-    //The function that takes a picture of the plant
-    public void takePicture(View view){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{
-                    Manifest.permission.CAMERA
-            },100);
-        }
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent,100);
-    }
-
-    //The function that sets the picture taken to the ImageView
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 100) {
-            Bitmap captureImage = (Bitmap) data.getExtras().get("data");
-            plantPicture = findViewById(R.id.plantImageView);
-            plantPicture.setImageBitmap(captureImage);
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    //The function that saves the image to the internal storage and sets the number of the picture to the plant.
-    public String saveImageToInternalStorage(Bitmap image) {
-        try {
-            String unique = UUID.randomUUID().toString();
-            FileOutputStream fos = openFileOutput(unique + ".JPEG", Context.MODE_PRIVATE);
-            image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.close();
-            return unique;
-        } catch (Exception e) {
-            Log.e("saveToInternalStorage()", e.getMessage());
-            return "1";
         }
     }
 
@@ -151,5 +123,103 @@ public class CreatePlantActivity extends AppCompatActivity {
             CreatePlantActivity.this.finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    //Creates an empty image file for me to write to.
+    private File getImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageName ="jpg_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File imageFile = File.createTempFile(imageName,".jpg",storageDir);
+        currentImagePath = imageFile.getAbsolutePath();
+
+        return imageFile;
+    }
+
+    //The functions that runs when you take a picture of the plant.
+    public void captureImage(View view) {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (cameraIntent.resolveActivity(getPackageManager()) != null && currentImagePath == null) {
+                imageFile = null;
+                try {
+                    imageFile = getImageFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (imageFile != null) {
+                Uri imageUri = FileProvider.getUriForFile(this, "com.example.digitalgarden.fileprovider", imageFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(cameraIntent, IMAGE_REQUEST);
+            }
+    }
+
+    public void changePhotoPicture(View view){
+        captureImage(view);
+        Bitmap bitmap = BitmapFactory.decodeFile(currentImagePath);
+        plantPicture = findViewById(R.id.plantImageView);
+        plantPicture.setImageBitmap(bitmap);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                Bitmap bitmap = BitmapFactory.decodeFile(currentImagePath);
+                ExifInterface ei = null;
+                try {
+                    ei = new ExifInterface(currentImagePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+                Bitmap rotatedBitmap = null;
+                switch(orientation) {
+
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotatedBitmap = rotateImage(bitmap, 90);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotatedBitmap = rotateImage(bitmap, 180);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotatedBitmap = rotateImage(bitmap, 270);
+                        break;
+
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        rotatedBitmap = bitmap;
+                }
+
+
+                try {
+                    FileOutputStream out = new FileOutputStream(currentImagePath);
+                    rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+
+                plantPicture = findViewById(R.id.plantImageView);
+                plantPicture.setImageBitmap(rotatedBitmap);
+            }
+        }
+    }
+
+
+    //The method that rotates the image because IT KEEPS GETTING ROTATED!!
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 }

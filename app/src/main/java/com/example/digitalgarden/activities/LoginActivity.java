@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Objects;
 
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     Button signInButton;
     FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private DocumentReference mDocRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

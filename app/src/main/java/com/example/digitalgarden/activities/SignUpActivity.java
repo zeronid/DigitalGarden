@@ -47,7 +47,8 @@ public class SignUpActivity extends AppCompatActivity {
         signInTextView = findViewById(R.id.signInTextView);
         signUpButton = findViewById(R.id.signUpButton);
         nameText = findViewById(R.id.nameEditText);
-        mDocRef = FirebaseFirestore.getInstance().collection("Users").document("info");
+
+
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override

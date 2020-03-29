@@ -33,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> plantNames = new ArrayList<>();
     public static ArrayList<Plant> plants = new ArrayList<>();
     private RecyclerView plantList;
-    final int NUMOFCOLUMNS = 2;
+    private final int NUMOFCOLUMNS = 2;
     private Toolbar toolbar;
-    PlantsAdapter adapter;
+    private PlantsAdapter adapter;
 
 
     @Override
@@ -43,13 +43,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadData(); //Loads up all the saved Plants.
+        //Loads up all the saved Plants.
+        loadData();
 
         //Setting up the ListView
         plantList = findViewById(R.id.recyclerView);
         updateList();
         checkDate();
 
+        //Setting up the toolbar
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("My Plants");
@@ -57,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-
         updateList();
         checkDate();
         super.onResume();
@@ -124,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
     private void checkDate(){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         int lastTimeStarted = settings.getInt("lastTimeStarted", -1);
-        Calendar calendar = Calendar.getInstance();
         int today = LocalDate.now().getDayOfMonth();
 
         if(today != lastTimeStarted){
@@ -142,21 +142,4 @@ public class MainActivity extends AppCompatActivity {
         saveData();
         super.onDestroy();
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main_menu,menu);
-//        MenuItem changeUserItem = menu.findItem(R.id.change_user);
-//        changeUserItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-//                intent.putExtra("changeUser",-1);
-//                startActivity(intent);
-//                finish();
-//                return false;
-//            }
-//        });
-//        return super.onCreateOptionsMenu(menu);
-//    }
 }
