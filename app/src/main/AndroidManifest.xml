@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.digitalgarden">
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,9 @@
         android:roundIcon="@mipmap/digital_garden_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SignUpActivity"></activity>
+        <activity android:name=".activities.ShowGalleryImageActivity"></activity>
+        <activity android:name=".activities.GalleryActivity" />
+        <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity
             android:name=".activities.SplashActivity"
@@ -31,6 +34,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.digitalgarden.fileprovider"
@@ -38,8 +42,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_path">
-            </meta-data>
+                android:resource="@xml/file_path" />
         </provider>
     </application>
 

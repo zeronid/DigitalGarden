@@ -6,25 +6,18 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.digitalgarden.activities.MainActivity;
 import com.example.digitalgarden.models.Plant;
 import com.example.digitalgarden.R;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 
-public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder> implements Filterable {
+public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder>{
 
     private ArrayList<Plant> plants;
     private LayoutInflater mInflater;
@@ -64,12 +57,6 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return plants.size();
-    }
-
-    @Override
-    public Filter getFilter() {
-
-        return null;
     }
 
 

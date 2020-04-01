@@ -45,6 +45,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
     public static ProgressBar waterLevelProgress;
     public TextView plantName, plantType, plantNote , waterLevelTextView;
     public ImageView plantPicture;
+    private int plantPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +59,11 @@ public class PlantDisplayActivity extends AppCompatActivity {
         plantPicture = findViewById(R.id.plantInfoPlantImageView);
         plantNote = findViewById(R.id.plantsNoteTextView);
         waterLevelTextView = findViewById(R.id.waterLevelTextView);
+        plantPosition = getIntent().getExtras().getInt("position");
 
         //Setting up the text in the water level text view
-        double currentWater = MainActivity.plants.get(getIntent().getExtras().getInt("position")).getCurrentWater() * 10;
-        double totalWater = MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel() * 10;
+        double currentWater = MainActivity.plants.get(plantPosition).getCurrentWater() * 10;
+        double totalWater = MainActivity.plants.get(plantPosition).getWaterLevel() * 10;
         double waterLevelDouble = currentWater / totalWater * 100;
         int waterLevellnt = (int) waterLevelDouble;
         waterLevelTextView.setText("Water level : " + waterLevellnt + "%");
@@ -69,27 +71,27 @@ public class PlantDisplayActivity extends AppCompatActivity {
         //Setting up the toolbar
         Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
+        getSupportActionBar().setTitle(MainActivity.plants.get(plantPosition).getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Setting up the Water Level Bar.
-        waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getCurrentWater() * 10  / MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel() * 10);
+        waterLevelProgress.setProgress(MainActivity.plants.get(plantPosition).getCurrentWater() * 10  / MainActivity.plants.get(plantPosition).getWaterLevel() * 10);
         waterLevelProgress.setScaleY(6f);//Bulks up the water progress bar.
 
         //Setting up the name.
-        plantName.setText(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName());
+        plantName.setText(MainActivity.plants.get(plantPosition).getName());
 
         //Setting up the type.
-        plantType.setText(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getType());
+        plantType.setText(MainActivity.plants.get(plantPosition).getType());
 
         //Setting up the picture.
-        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage());
+        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.plants.get(plantPosition).getPlantImage());
         plantPicture = findViewById(R.id.plantInfoPlantImageView);
         plantPicture.setImageBitmap(bitmap);
 
         //Setting up the note.
-        if(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getNote() != null) {
-            plantNote.setText(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getNote());
+        if(MainActivity.plants.get(plantPosition).getNote() != null) {
+            plantNote.setText(MainActivity.plants.get(plantPosition).getNote());
         }
     }
 
@@ -98,12 +100,12 @@ public class PlantDisplayActivity extends AppCompatActivity {
     public void water(View view){
         //Sets the progress bar to 100%
         waterLevelProgress = findViewById(R.id.waterLevelProgressBar);
-        waterLevelProgress.setMax(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel());
-        waterLevelProgress.setProgress(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getWaterLevel() * 10);
-        MainActivity.plants.get(getIntent().getExtras().getInt("position")).water();
+        waterLevelProgress.setMax(MainActivity.plants.get(plantPosition).getWaterLevel());
+        waterLevelProgress.setProgress(MainActivity.plants.get(plantPosition).getWaterLevel() * 10);
+        MainActivity.plants.get(plantPosition).water();
 
         //Displays a toast that notifies the user about the watering.
-        Toast.makeText(this, MainActivity.plants.get(getIntent().getExtras().getInt("position")).getName() + "'s water is now at 100%!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, MainActivity.plants.get(plantPosition).getName() + "'s water is now at 100%!", Toast.LENGTH_SHORT).show();
 
         //Updates the text that display the percentage of the water
         waterLevelTextView = findViewById(R.id.waterLevelTextView);
@@ -118,11 +120,11 @@ public class PlantDisplayActivity extends AppCompatActivity {
                 setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                if(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage() != "1") {
-                                    deleteImage(getIntent().getExtras().getInt("position"));
+                                if(MainActivity.plants.get(plantPosition).getPlantImage() != "1") {
+                                    deleteImage(plantPosition);
                                 }
-                                MainActivity.plantNames.remove(getIntent().getExtras().getInt("position"));
-                                MainActivity.plants.remove(getIntent().getExtras().getInt("position"));
+                                MainActivity.plantNames.remove(plantPosition);
+                                MainActivity.plants.remove(plantPosition);
                                 finish();//Very important,when you press "Yes" finish the activity.
                     }
                 }).setNegativeButton(android.R.string.no,null).
@@ -139,14 +141,14 @@ public class PlantDisplayActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==android.R.id.home){
             PlantDisplayActivity.this.finish();
-            MainActivity.plants.get(getIntent().getExtras().getInt("position")).setNote(plantNote.getText().toString());
+            MainActivity.plants.get(plantPosition).setNote(plantNote.getText().toString());
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        MainActivity.plants.get(getIntent().getExtras().getInt("position")).setNote(plantNote.getText().toString());
+        MainActivity.plants.get(plantPosition).setNote(plantNote.getText().toString());
         super.onBackPressed();
     }
 
@@ -168,7 +170,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
     //The functions that runs when you take a picture of the plant.
     public void captureImage(View view) {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File imageFile = new File(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage());
+        File imageFile = new File(MainActivity.plants.get(plantPosition).getPlantImage());
 
 
             Uri imageUri = FileProvider.getUriForFile(this, "com.example.digitalgarden.fileprovider", imageFile);
@@ -182,10 +184,10 @@ public class PlantDisplayActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
-                Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage());
+                Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.plants.get(plantPosition).getPlantImage());
                 ExifInterface ei = null;
                 try {
-                    ei = new ExifInterface(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage());
+                    ei = new ExifInterface(MainActivity.plants.get(plantPosition).getPlantImage());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -212,7 +214,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
                         rotatedBitmap = bitmap;
                 }
                 try {
-                    FileOutputStream out = new FileOutputStream(MainActivity.plants.get(getIntent().getExtras().getInt("position")).getPlantImage());
+                    FileOutputStream out = new FileOutputStream(MainActivity.plants.get(plantPosition).getPlantImage());
                     rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -231,8 +233,9 @@ public class PlantDisplayActivity extends AppCompatActivity {
                 matrix, true);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void goToGallery(View view) {
+        Intent intent = new Intent(PlantDisplayActivity.this,GalleryActivity.class);
+        intent.putExtra("position",plantPosition);
+        startActivity(intent);
     }
 }
