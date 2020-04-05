@@ -19,6 +19,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Document;
 
 import java.util.Objects;
 
@@ -29,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DocumentReference mDocRef;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +56,20 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser mFireBaseUser = mFirebaseAuth.getCurrentUser();
-                if(mFireBaseUser != null ){
-                    Toast.makeText(LoginActivity.this, "You are logged in!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                    LoginActivity.this.finish();
-                }else{
+                if (mFireBaseUser != null) {
+                    mDocRef = FirebaseFirestore.getInstance().collection("Users").document(mFireBaseUser.getUid());
+                    Task<DocumentSnapshot> doc = mDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot doc = task.getResult();
+                            name = doc.getString("Name");
+                            Toast.makeText(LoginActivity.this, "Welcome, " + name, Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            LoginActivity.this.finish();
+                        }
+                    });
+                }
+                else {
                     Toast.makeText(LoginActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -78,6 +92,21 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+                                FirebaseUser mFireBaseUser = mFirebaseAuth.getCurrentUser();
+                                if (mFireBaseUser != null){
+                                    mDocRef = FirebaseFirestore.getInstance().collection("Users").document(mFireBaseUser.getUid());
+                                    mDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if(task.isSuccessful()){
+                                                DocumentSnapshot document = task.getResult();
+                                                if(document!=null){
+                                                    name = document.getString("Name");
+                                                }
+                                            }
+                                        }
+                                    });}
+
                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
                                 LoginActivity.this.finish();
                             }else{

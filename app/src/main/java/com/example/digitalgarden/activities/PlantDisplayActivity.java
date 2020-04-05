@@ -75,7 +75,9 @@ public class PlantDisplayActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Setting up the Water Level Bar.
-        waterLevelProgress.setProgress(MainActivity.plants.get(plantPosition).getCurrentWater() * 10  / MainActivity.plants.get(plantPosition).getWaterLevel() * 10);
+        double prog = MainActivity.plants.get(plantPosition).getCurrentWater()  / MainActivity.plants.get(plantPosition).getWaterLevel();
+        prog = prog*100;
+        waterLevelProgress.setProgress((int)prog);
         waterLevelProgress.setScaleY(6f);//Bulks up the water progress bar.
 
         //Setting up the name.
@@ -100,8 +102,8 @@ public class PlantDisplayActivity extends AppCompatActivity {
     public void water(View view){
         //Sets the progress bar to 100%
         waterLevelProgress = findViewById(R.id.waterLevelProgressBar);
-        waterLevelProgress.setMax(MainActivity.plants.get(plantPosition).getWaterLevel());
-        waterLevelProgress.setProgress(MainActivity.plants.get(plantPosition).getWaterLevel() * 10);
+        waterLevelProgress.setMax((int)MainActivity.plants.get(plantPosition).getWaterLevel());
+        waterLevelProgress.setProgress((int)MainActivity.plants.get(plantPosition).getWaterLevel() * 10);
         MainActivity.plants.get(plantPosition).water();
 
         //Displays a toast that notifies the user about the watering.
@@ -122,6 +124,10 @@ public class PlantDisplayActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                                 if(MainActivity.plants.get(plantPosition).getPlantImage() != "1") {
                                     deleteImage(plantPosition);
+                                }
+                                for(String plant:MainActivity.plants.get(plantPosition).getPlantsImages()){
+                                    File file = new File(plant);
+                                    file.delete();
                                 }
                                 MainActivity.plantNames.remove(plantPosition);
                                 MainActivity.plants.remove(plantPosition);
@@ -237,5 +243,13 @@ public class PlantDisplayActivity extends AppCompatActivity {
         Intent intent = new Intent(PlantDisplayActivity.this,GalleryActivity.class);
         intent.putExtra("position",plantPosition);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.plants.get(plantPosition).getPlantImage());
+        plantPicture = findViewById(R.id.plantInfoPlantImageView);
+        plantPicture.setImageBitmap(bitmap);
     }
 }

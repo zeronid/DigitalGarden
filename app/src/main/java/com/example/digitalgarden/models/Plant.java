@@ -1,13 +1,17 @@
 package com.example.digitalgarden.models;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Plant {
 
     private String name,type,note;
-    private int waterLevel , currentWater;
+    private double waterLevel , currentWater;
     private String imageStringUUID;
     private ArrayList<String> plantsImages;
+    public int dayUpdated;
 
     public Plant(String name,String type,int waterLevel,int currentWater, String imageStringUUID,String note){
         setName(name);
@@ -17,6 +21,7 @@ public class Plant {
         setNote(note);
         setCurrentWater(currentWater);
         setPlantsImages(imageStringUUID);
+        this.dayUpdated = Calendar.DAY_OF_MONTH;
     }
 
     public void water(){
@@ -35,24 +40,24 @@ public class Plant {
     public void setType(String type){
         this.type = type;
     }
-    public int getWaterLevel(){
+    public double getWaterLevel(){
         return waterLevel;
     }
-    public void setWaterLevel(int waterLevel){
+    public void setWaterLevel(double waterLevel){
         this.waterLevel = waterLevel;
     }
     public String getPlantImage(){return this.imageStringUUID;}
     public void setPlantImage(String image){this.imageStringUUID = image;}
     public String getNote() { return note; }
     public void setNote(String note){this.note = note;}
-    public int getCurrentWater(){return this.currentWater;}
-    public void setCurrentWater(int currentWater){this.currentWater = currentWater;}
+    public double getCurrentWater(){return this.currentWater;}
+    public void setCurrentWater(double currentWater){this.currentWater = currentWater;}
     public ArrayList<String> getPlantsImages() { return plantsImages; }
     public void setPlantsImages(String firstPlantsImage) {
         this.plantsImages = new ArrayList<String>();
         plantsImages.add(firstPlantsImage);
     }
     public void addImageToGallery(String image){
-        this.plantsImages.add(image);
+        this.plantsImages.add(0,image);
     }
 }

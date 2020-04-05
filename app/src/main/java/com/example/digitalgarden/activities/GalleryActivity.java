@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -40,6 +41,7 @@ public class GalleryActivity extends AppCompatActivity {
     private final int NUMOFCOLUMNS = 3;
     private String currentImagePath,imageName;
     GalleryAdapter myAdapter;
+    ArrayList<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class GalleryActivity extends AppCompatActivity {
 
         plantPosition = getIntent().getExtras().getInt("position");
         mRecyclerView = findViewById(R.id.galleryRecyclerView);
+        list = MainActivity.plants.get(plantPosition).getPlantsImages();
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(this,NUMOFCOLUMNS));
         myAdapter = new GalleryAdapter(MainActivity.plants.get(plantPosition).getPlantsImages(),this,plantPosition);
@@ -56,7 +59,11 @@ public class GalleryActivity extends AppCompatActivity {
         myAdapter.setClickListener(new GalleryAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                Intent intent = new Intent(GalleryActivity.this,ShowGalleryImageActivity.class);
+                intent.putExtra("picture",MainActivity.plants.get(plantPosition).getPlantsImages().get(position));
+                intent.putExtra("picturePosition",position);
+                intent.putExtra("plant_pos",plantPosition);
+                startActivity(intent);
             }
         });
 
@@ -153,5 +160,11 @@ public class GalleryActivity extends AppCompatActivity {
         File imageFile = File.createTempFile(imageName,".jpg",storageDir);
         currentImagePath = imageFile.getAbsolutePath();
         return imageFile;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        myAdapter.notifyDataSetChanged();
     }
 }

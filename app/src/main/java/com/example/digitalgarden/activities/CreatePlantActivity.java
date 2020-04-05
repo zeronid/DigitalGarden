@@ -109,7 +109,10 @@ public class CreatePlantActivity extends AppCompatActivity {
             Toast.makeText(this, "Please choose a name", Toast.LENGTH_SHORT).show();
         } //Create the plant and push it to the plants arrayList
         else {
-            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue , lastWateredSpinnerIntegerValue,currentImagePath,plantsNote.getText().toString());
+            if(currentImagePath == null){
+                currentImagePath = "1";
+            }
+            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue ,(waterFrequencySpinnerIntegerValue - lastWateredSpinnerIntegerValue),currentImagePath,plantsNote.getText().toString());
             MainActivity.plants.add(plant);
             MainActivity.plantNames.add(newPlantName.getText().toString());
             finish();

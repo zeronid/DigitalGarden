@@ -45,9 +45,9 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
         holder.name.setText(MainActivity.plantNames.get(position));
         holder.type.setText(MainActivity.plants.get(position).getType());
         holder.drop.setImageResource(R.drawable.waterdropblue);
-        if(MainActivity.plants.get(position).getCurrentWater() * 10 / MainActivity.plants.get(position).getWaterLevel() * 10 <= 50){
+        if(((MainActivity.plants.get(position).getCurrentWater() * 10) / (MainActivity.plants.get(position).getWaterLevel() * 10)) <= 0.5){
             holder.drop.setImageResource(R.drawable.waterdropyellow);
-        } if (MainActivity.plants.get(position).getCurrentWater() * 10 / MainActivity.plants.get(position).getWaterLevel() * 10 <= 25){
+        } if (((MainActivity.plants.get(position).getCurrentWater() * 10) / (MainActivity.plants.get(position).getWaterLevel() * 10)) <= 0.25){
             holder.drop.setImageResource(R.drawable.waterdropred);
         }
         holder.picture.setImageBitmap(getPlantImage(position));
@@ -99,7 +99,7 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
     }
 
     private Bitmap getPlantImage(int pos){
-        if(MainActivity.plants.get(pos).getPlantImage() == "1") {
+        if(MainActivity.plants.get(pos).getPlantImage().equals("1")) {
             Bitmap bitMap = BitmapFactory.decodeResource(this.context.getResources(),R.drawable.plant);
             return bitMap;
         }

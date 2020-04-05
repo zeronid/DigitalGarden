@@ -4,9 +4,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.digitalgarden.jobs.PlantsWaterJob;
 import com.example.digitalgarden.models.Plant;
 import com.example.digitalgarden.R;
 import com.example.digitalgarden.adapters.PlantsAdapter;
@@ -32,10 +37,13 @@ public class MainActivity extends AppCompatActivity {
     //An array list for plant objects and one for the names only.
     public static ArrayList<String> plantNames = new ArrayList<>();
     public static ArrayList<Plant> plants = new ArrayList<>();
+
+    private static int backProccesStarted = 0;
     private RecyclerView plantList;
     private final int NUMOFCOLUMNS = 2;
     private Toolbar toolbar;
     private PlantsAdapter adapter;
+
 
 
     @Override
@@ -49,7 +57,17 @@ public class MainActivity extends AppCompatActivity {
         //Setting up the ListView
         plantList = findViewById(R.id.recyclerView);
         updateList();
-        checkDate();
+
+        //Manage the water of the plants (Start the PlantsWaterJob)
+        if(backProccesStarted == 0) {
+            ComponentName componentName = new ComponentName(this, PlantsWaterJob.class);
+            JobInfo info = new JobInfo.Builder(1, componentName)
+                    .setPeriodic(60 * 60 * 1000).setPersisted(true).build();
+
+            JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+            scheduler.schedule(info);
+            backProccesStarted = 1;
+        }
 
         //Setting up the toolbar
         toolbar = findViewById(R.id.toolBar);
@@ -60,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         updateList();
-        checkDate();
         super.onResume();
     }
 
@@ -117,23 +134,6 @@ public class MainActivity extends AppCompatActivity {
         if(plants == null){
             plants = new ArrayList<>();
             plantNames = new ArrayList<>();
-        }
-    }
-
-
-    //Checks if a day has passed and updates the water ammount of the plant.
-    private void checkDate(){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        int lastTimeStarted = settings.getInt("lastTimeStarted", -1);
-        int today = LocalDate.now().getDayOfMonth();
-
-        if(today != lastTimeStarted){
-            for(int i=0;i<plants.size();i++){
-                plants.get(i).setWaterLevel(plants.get(i).getCurrentWater()-1);
-            }
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt("lastTimeStarted", today);
-            editor.apply();
         }
     }
 
