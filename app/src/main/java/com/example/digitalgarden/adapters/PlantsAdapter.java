@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -15,11 +17,15 @@ import com.example.digitalgarden.activities.MainActivity;
 import com.example.digitalgarden.models.Plant;
 import com.example.digitalgarden.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder>{
+public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder> implements Filterable {
 
     private ArrayList<Plant> plants;
+    private ArrayList<Plant> plantsAll;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     Context context;
@@ -29,6 +35,7 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
         this.mInflater = LayoutInflater.from(context);
         this.plants = data;
         this.context = context;
+        this.plantsAll = new ArrayList<>(data);
     }
 
     // inflates the cell layout from xml when needed
@@ -58,6 +65,40 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
     public int getItemCount() {
         return plants.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            List<Plant> filteredList = new ArrayList<>();
+            if(constraint.toString().isEmpty()){
+                filteredList.addAll(plantsAll);
+            }else{
+                for(Plant plant : plantsAll){
+                    if(plant.getName().toLowerCase().contains(constraint.toString().toLowerCase())){
+                        filteredList.add(plant);
+                    }
+                }
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            plants.clear();
+            plants.addAll((Collection<? extends Plant>) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
     // stores and recycles views as they are scrolled off screen
