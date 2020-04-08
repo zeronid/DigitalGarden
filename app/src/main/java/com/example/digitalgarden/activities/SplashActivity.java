@@ -38,20 +38,13 @@ public class SplashActivity extends AppCompatActivity {
         appName = findViewById(R.id.appName);
         Typeface typeface = ResourcesCompat.getFont(this,R.font.sweet_leaf);
         appName.setTypeface(typeface);
-        Animation fadeIn = AnimationUtils.loadAnimation(this,R.anim.text_fade_in);
-        appName.startAnimation(fadeIn);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(4000);
                     authenticateUser();
                     mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         }).start();
     }

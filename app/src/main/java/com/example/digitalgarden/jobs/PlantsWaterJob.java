@@ -28,12 +28,14 @@ public class PlantsWaterJob extends JobService {
     public boolean onStartJob(final JobParameters params) {
         notificationManager = NotificationManagerCompat.from(this);
 
-        if (LocalTime.now().getHour() == 7) {
+        //TODO change it to normal time(7)
+        if (LocalTime.now().getHour() >=12 ) {
             for (int i = 0; i < MainActivity.plants.size(); i++) {
                 if (MainActivity.plants.get(i).getCurrentWater() > 0 && MainActivity.plants.get(i).dayUpdated != Calendar.DAY_OF_MONTH) {
                     MainActivity.plants.get(i).setCurrentWater(MainActivity.plants.get(i).getCurrentWater() - 1);
                     MainActivity.plants.get(i).dayUpdated = Calendar.DAY_OF_MONTH;
                 }
+
             }
             for (int j = 0; j < MainActivity.plants.size(); j++) {
                 if ((MainActivity.plants.get(j).getCurrentWater() / MainActivity.plants.get(j).getWaterLevel()) < 0.25) {

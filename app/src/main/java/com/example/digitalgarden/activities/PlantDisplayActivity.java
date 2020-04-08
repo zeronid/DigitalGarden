@@ -1,28 +1,15 @@
 package com.example.digitalgarden.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,12 +20,6 @@ import android.widget.Toast;
 import com.example.digitalgarden.R;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class PlantDisplayActivity extends AppCompatActivity {
 
@@ -156,87 +137,6 @@ public class PlantDisplayActivity extends AppCompatActivity {
     public void onBackPressed() {
         MainActivity.plants.get(plantPosition).setNote(plantNote.getText().toString());
         super.onBackPressed();
-    }
-
-    public void changePicture(final View view){
-        new AlertDialog.Builder(this).
-                setTitle("Change picture").
-                setMessage("Do you want to change the plant's picture?").
-                setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        captureImage(view);
-                    }
-                }).setNegativeButton(android.R.string.no,null).
-                setIcon(android.R.drawable.alert_light_frame)
-                .show();
-    }
-
-
-    //The functions that runs when you take a picture of the plant.
-    public void captureImage(View view) {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File imageFile = new File(MainActivity.plants.get(plantPosition).getPlantImage());
-
-
-            Uri imageUri = FileProvider.getUriForFile(this, "com.example.digitalgarden.fileprovider", imageFile);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            startActivityForResult(cameraIntent, 1);
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-                Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.plants.get(plantPosition).getPlantImage());
-                ExifInterface ei = null;
-                try {
-                    ei = new ExifInterface(MainActivity.plants.get(plantPosition).getPlantImage());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.ORIENTATION_UNDEFINED);
-
-                Bitmap rotatedBitmap = null;
-                switch(orientation) {
-
-                    case ExifInterface.ORIENTATION_ROTATE_90:
-                        rotatedBitmap = rotateImage(bitmap, 90);
-                        break;
-
-                    case ExifInterface.ORIENTATION_ROTATE_180:
-                        rotatedBitmap = rotateImage(bitmap, 180);
-                        break;
-
-                    case ExifInterface.ORIENTATION_ROTATE_270:
-                        rotatedBitmap = rotateImage(bitmap, 270);
-                        break;
-
-                    case ExifInterface.ORIENTATION_NORMAL:
-                    default:
-                        rotatedBitmap = bitmap;
-                }
-                try {
-                    FileOutputStream out = new FileOutputStream(MainActivity.plants.get(plantPosition).getPlantImage());
-                    rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                plantPicture = findViewById(R.id.plantInfoPlantImageView);
-                plantPicture.setImageBitmap(rotatedBitmap);
-            }
-        }
-    }
-
-    public static Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
     }
 
     public void goToGallery(View view) {

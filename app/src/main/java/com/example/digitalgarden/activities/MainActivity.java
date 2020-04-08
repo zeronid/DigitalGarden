@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> plantNames = new ArrayList<>();
     public static ArrayList<Plant> plants = new ArrayList<>();
 
-    private static int backProccesStarted = 0;
     private RecyclerView plantList;
     private final int NUMOFCOLUMNS = 2;
     private Toolbar toolbar;
@@ -59,15 +58,13 @@ public class MainActivity extends AppCompatActivity {
         updateList();
 
         //Manage the water of the plants (Start the PlantsWaterJob)
-        if(backProccesStarted == 0) {
             ComponentName componentName = new ComponentName(this, PlantsWaterJob.class);
             JobInfo info = new JobInfo.Builder(1, componentName)
-                    .setPeriodic(60 * 60 * 1000).setPersisted(true).build();
+                    .setPeriodic(30 * 60 * 1000).setPersisted(true).build();
 
             JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
             scheduler.schedule(info);
-            backProccesStarted = 1;
-        }
+
 
         //Setting up the toolbar
         toolbar = findViewById(R.id.toolBar);
