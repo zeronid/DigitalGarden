@@ -23,9 +23,9 @@ import java.io.File;
 
 public class PlantDisplayActivity extends AppCompatActivity {
 
-    public static ProgressBar waterLevelProgress;
-    public TextView plantName, plantType, plantNote , waterLevelTextView;
-    public ImageView plantPicture;
+    private static ProgressBar waterLevelProgress;
+    private TextView plantName, plantType, plantNote , waterLevelTextView;
+    private ImageView plantPicture;
     private int plantPosition;
 
     @Override

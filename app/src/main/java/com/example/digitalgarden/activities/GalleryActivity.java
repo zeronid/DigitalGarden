@@ -40,13 +40,14 @@ public class GalleryActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private final int NUMOFCOLUMNS = 3;
     private String currentImagePath,imageName;
-    GalleryAdapter myAdapter;
-    ArrayList<String> list;
+    private GalleryAdapter myAdapter;
+    private ArrayList<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+
 
         plantPosition = getIntent().getExtras().getInt("position");
         mRecyclerView = findViewById(R.id.galleryRecyclerView);
@@ -67,6 +68,7 @@ public class GalleryActivity extends AppCompatActivity {
             }
         });
 
+        //Setting up the toolbar
         toolbar = findViewById(R.id.galleryToolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle(MainActivity.plants.get(plantPosition).getName() + "'s" + " pictures");
@@ -80,10 +82,6 @@ public class GalleryActivity extends AppCompatActivity {
             GalleryActivity.this.finish();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void addImage(View view){
-        captureImage(view);
     }
 
     //The functions that runs when you take a picture of the plant.

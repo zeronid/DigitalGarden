@@ -11,14 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.digitalgarden.jobs.PlantsWaterJob;
 import com.example.digitalgarden.models.Plant;
@@ -58,18 +61,31 @@ public class MainActivity extends AppCompatActivity {
         updateList();
 
         //Manage the water of the plants (Start the PlantsWaterJob)
-            ComponentName componentName = new ComponentName(this, PlantsWaterJob.class);
-            JobInfo info = new JobInfo.Builder(1, componentName)
-                    .setPeriodic(30 * 60 * 1000).setPersisted(true).build();
-
-            JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-            scheduler.schedule(info);
+        startWateringJob();
 
 
         //Setting up the toolbar
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("My Plants");
+    }
+
+    @Override
+    protected void onPause() {
+        saveData();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        updateList();
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        saveData();
+        super.onDestroy();
     }
 
     //The function responsible for the search box
@@ -91,18 +107,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onResume() {
-        updateList();
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        saveData();
-        super.onPause();
     }
 
     //The add plant method that is called when create plant button is pressed.
@@ -155,9 +159,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        saveData();
-        super.onDestroy();
+    private void startWateringJob(){
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.project_id),Context.MODE_PRIVATE);
+        if(!(sharedPreferences.getBoolean("wateringJob",false))) {
+            ComponentName componentName = new ComponentName(this, PlantsWaterJob.class);
+            JobInfo info = new JobInfo.Builder(1, componentName)
+                    .setPeriodic(30 * 60 * 1000).setPersisted(true).build();
+
+            JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+            scheduler.schedule(info);
+            SharedPreferences.Editor edit = sharedPreferences.edit();
+            edit.putBoolean("wateringJob",true);
+            edit.apply();
+        }
     }
 }

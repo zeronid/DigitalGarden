@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -13,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.digitalgarden.R;
 import com.example.digitalgarden.activities.MainActivity;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 
@@ -28,17 +28,17 @@ public class PlantsWaterJob extends JobService {
     public boolean onStartJob(final JobParameters params) {
         notificationManager = NotificationManagerCompat.from(this);
 
-        //TODO change it to normal time(7)
-        if (LocalTime.now().getHour() >=12 ) {
+        if (LocalTime.now().getHour() >=1  && LocalTime.now().getHour() <=2) {
             for (int i = 0; i < MainActivity.plants.size(); i++) {
-                if (MainActivity.plants.get(i).getCurrentWater() > 0 && MainActivity.plants.get(i).dayUpdated != Calendar.DAY_OF_MONTH) {
+                //TODO change to LocalDate.now().getDayOfMonth()
+                if (MainActivity.plants.get(i).getCurrentWater() > 0 && (MainActivity.plants.get(i).dayUpdated != 10)) {
                     MainActivity.plants.get(i).setCurrentWater(MainActivity.plants.get(i).getCurrentWater() - 1);
-                    MainActivity.plants.get(i).dayUpdated = Calendar.DAY_OF_MONTH;
+                    MainActivity.plants.get(i).dayUpdated = LocalDate.now().getDayOfMonth();
                 }
 
             }
             for (int j = 0; j < MainActivity.plants.size(); j++) {
-                if ((MainActivity.plants.get(j).getCurrentWater() / MainActivity.plants.get(j).getWaterLevel()) < 0.25) {
+                if ((MainActivity.plants.get(j).getCurrentWater() / MainActivity.plants.get(j).getWaterLevel()) <= 0.25) {
                     Intent resultIntent = new Intent(this, MainActivity.class);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)

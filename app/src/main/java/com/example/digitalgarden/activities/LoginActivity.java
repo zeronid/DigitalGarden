@@ -28,12 +28,12 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView appName, signUp , emailEditText, passwordEditText;
-    Button signInButton;
-    FirebaseAuth mFirebaseAuth;
+    private TextView appName, signUp , emailEditText, passwordEditText;
+    private Button signInButton;
+    private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DocumentReference mDocRef;
-    String name;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -24,11 +24,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ShowGalleryImageActivity extends AppCompatActivity {
-    ImageView image;
+    private ImageView image;
     private int position;
-    TextView date;
-    String s;
-    Toolbar toolbar;
+    private TextView date;
+    private String s;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

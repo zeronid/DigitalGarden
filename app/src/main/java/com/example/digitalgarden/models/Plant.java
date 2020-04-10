@@ -21,7 +21,7 @@ public class Plant {
         setNote(note);
         setCurrentWater(currentWater);
         setPlantsImages(imageStringUUID);
-        this.dayUpdated = Calendar.DAY_OF_MONTH;
+        this.dayUpdated = LocalDate.now().getDayOfMonth();
     }
 
     public void water(){

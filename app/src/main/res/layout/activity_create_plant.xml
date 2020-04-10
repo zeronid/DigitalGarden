@@ -14,7 +14,8 @@
         android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@color/brownContrast"></androidx.appcompat.widget.Toolbar>
+        app:titleTextColor="@color/brownContrast">
+    </androidx.appcompat.widget.Toolbar>
 
     <EditText
         android:id="@+id/newPlantNameEditText"

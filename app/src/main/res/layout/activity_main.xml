@@ -13,35 +13,35 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        app:titleTextColor="@color/brownContrast">
-    </androidx.appcompat.widget.Toolbar>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@color/brownContrast"></androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginBottom="110dp"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/addPlantButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/roundedbutton"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorAccent"
         android:onClick="addPlant"
         android:text="@string/add_plant"
-        android:textColor="@android:color/white"
+        android:textColor="@color/brownContrast"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
-    android:layout_height="250dp"
-    android:background="@color/brownContrast"
-    android:layout_margin="0.5dp">
+    android:layout_height="200dp"
+    android:background="@color/colorAccent"
+    android:layout_margin="6dp">
 
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/plantImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="Plant_Image"
         android:scaleType="fitXY"
-        android:foreground="@drawable/gradient"
-        android:layout_margin="0.5dp"
-        android:padding="0.3dp"/>
+        android:background="@color/brownContrast"
+        app:riv_corner_radius="15dip"
+        app:riv_mutate_background="true"
+        app:riv_border_width="1dip"
+        app:riv_border_color="@color/colorPrimaryDark"/>
 
 
     <TextView
@@ -27,7 +29,8 @@
         android:layout_alignTop="@id/plantImage"
         android:layout_alignRight="@id/plantImage"
         android:layout_alignBottom="@id/plantImage"
-        android:layout_margin="1dp"
+        android:layout_marginStart="20dp"
+        android:layout_margin="8dp"
         android:gravity="bottom"
         android:text="Type"
         android:textStyle="bold"
@@ -41,7 +44,8 @@
         android:layout_alignTop="@id/plantImage"
         android:layout_alignRight="@id/plantImage"
         android:layout_alignBottom="@id/plantImage"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
         android:textSize="20sp"
         android:gravity="bottom"
         android:text="Name"
@@ -58,6 +62,8 @@
         android:src="@drawable/waterdropblue"
         android:layout_alignTop="@id/plantImage"
         android:layout_alignRight="@id/plantImage"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
         />
 
 </RelativeLayout>

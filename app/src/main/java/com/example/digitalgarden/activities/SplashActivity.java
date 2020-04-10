@@ -23,12 +23,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SplashActivity extends AppCompatActivity {
-    TextView appName;
-    FirebaseAuth.AuthStateListener mAuthStateListener;
-    FirebaseUser mFireBaseUser;
-    FirebaseAuth mFirebaseAuth;
-    DocumentReference mDocRef;
-    String name;
+
+    private TextView appName;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseUser mFireBaseUser;
+    private FirebaseAuth mFirebaseAuth;
+    private DocumentReference mDocRef;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
