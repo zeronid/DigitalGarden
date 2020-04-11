@@ -21,7 +21,7 @@ public class Plant {
         setNote(note);
         setCurrentWater(currentWater);
         setPlantsImages(imageStringUUID);
-        this.dayUpdated = LocalDate.now().getDayOfMonth();
+        this.dayUpdated = LocalDate.now().getDayOfYear();
     }
 
     public void water(){
@@ -51,7 +51,11 @@ public class Plant {
     public String getNote() { return note; }
     public void setNote(String note){this.note = note;}
     public double getCurrentWater(){return this.currentWater;}
-    public void setCurrentWater(double currentWater){this.currentWater = currentWater;}
+    public void setCurrentWater(double currentWater){
+        if(currentWater >= 0) {
+            this.currentWater = currentWater;
+        }else this.currentWater = 0;
+    }
     public ArrayList<String> getPlantsImages() { return plantsImages; }
     public void setPlantsImages(String firstPlantsImage) {
         this.plantsImages = new ArrayList<String>();

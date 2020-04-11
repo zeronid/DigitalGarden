@@ -104,7 +104,7 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == -1 || resultCode==1){
+        if(resultCode==1){
             Bitmap bitmap = BitmapFactory.decodeFile(currentImagePath);
             FileOutputStream out;
             try {
@@ -138,8 +138,6 @@ public class GalleryActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        } else {
-            MainActivity.plants.get(plantPosition).addImageToGallery("1");
         }
     }
 

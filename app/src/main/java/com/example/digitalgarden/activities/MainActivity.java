@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         updateList();
 
         //Manage the water of the plants (Start the PlantsWaterJob)
-        startWateringJob();
+        waterPlants();
+
 
 
         //Setting up the toolbar
@@ -85,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         saveData();
+        //Start the notification activity (Only for first time opening program)
+        startWateringJob();
         super.onDestroy();
     }
 
@@ -164,13 +167,25 @@ public class MainActivity extends AppCompatActivity {
         if(!(sharedPreferences.getBoolean("wateringJob",false))) {
             ComponentName componentName = new ComponentName(this, PlantsWaterJob.class);
             JobInfo info = new JobInfo.Builder(1, componentName)
-                    .setPeriodic(30 * 60 * 1000).setPersisted(true).build();
+                    .setPeriodic(24 * 60 * 60 * 1000).setPersisted(true).build();
 
             JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
             scheduler.schedule(info);
             SharedPreferences.Editor edit = sharedPreferences.edit();
             edit.putBoolean("wateringJob",true);
             edit.apply();
+        }
+    }
+
+    public void waterPlants(){
+        for (int i=0;i<plants.size();i++){
+            if(plants.get(i).dayUpdated == LocalDate.now().getDayOfYear()){
+                break;
+            }else if(plants.get(i).dayUpdated < LocalDate.now().getDayOfYear()){
+                plants.get(i).setCurrentWater(plants.get(i).getCurrentWater() - (LocalDate.now().getDayOfYear() - plants.get(i).dayUpdated));
+            } else if(plants.get(i).dayUpdated > LocalDate.now().getDayOfYear()){
+                plants.get(i).setCurrentWater(plants.get(i).getCurrentWater() - ((365-plants.get(i).dayUpdated) + LocalDate.now().getDayOfYear()));
+            }
         }
     }
 }
