@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.digitalgarden.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,6 +34,7 @@ public class ShowGalleryImageActivity extends AppCompatActivity {
     private TextView date;
     private String s;
     private Toolbar toolbar;
+    private FirebaseStorage mFirebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,8 @@ public class ShowGalleryImageActivity extends AppCompatActivity {
 
         image = findViewById(R.id.picture);
         position = getIntent().getExtras().getInt("plant_pos");
-        Bitmap bit = BitmapFactory.decodeFile(getIntent().getExtras().getString("picture"));
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+        Bitmap bit = BitmapFactory.decodeFile(path + "/" + getIntent().getExtras().getString("picture"));
         image.setImageBitmap(bit);
 
         date = findViewById(R.id.dateCreated);
@@ -60,6 +67,7 @@ public class ShowGalleryImageActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             File file = new File(MainActivity.plants.get(position).getPlantsImages().get(getIntent().getExtras().getInt("picturePosition")));
                             file.delete();
+                            deleteFileFromFirebase( (String) getIntent().getExtras().get("picture"));
                             MainActivity.plants.get(position).getPlantsImages().remove(getIntent().getExtras().getInt("picturePosition"));
                             finish();
                         }
@@ -93,5 +101,22 @@ public class ShowGalleryImageActivity extends AppCompatActivity {
             ShowGalleryImageActivity.this.finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteFileFromFirebase(String image){
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageRef = mFirebaseStorage.getReference();
+        StorageReference desertRef = storageRef.child(image);
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                //TODO implement
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //TODO implement
+            }
+        });
     }
 }

@@ -5,22 +5,42 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+
+import android.os.Environment;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.digitalgarden.R;
-import com.example.digitalgarden.app.app;
+import com.example.digitalgarden.models.Plant;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.regex.Pattern;
+
+import io.grpc.Context;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -29,7 +49,9 @@ public class SplashActivity extends AppCompatActivity {
     private FirebaseUser mFireBaseUser;
     private FirebaseAuth mFirebaseAuth;
     private DocumentReference mDocRef;
-    private String name;
+    private ArrayList<Plant> plants;
+    private FirebaseStorage storage;
+    private StorageReference imageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +61,12 @@ public class SplashActivity extends AppCompatActivity {
         appName = findViewById(R.id.appName);
         Typeface typeface = ResourcesCompat.getFont(this,R.font.sweet_leaf);
         appName.setTypeface(typeface);
+        plants = new ArrayList<>();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                     authenticateUser();
                     mFirebaseAuth.addAuthStateListener(mAuthStateListener);
             }
@@ -62,23 +80,84 @@ public class SplashActivity extends AppCompatActivity {
                 mFireBaseUser = mFirebaseAuth.getCurrentUser();
                 if (mFireBaseUser != null) {
                     mDocRef = FirebaseFirestore.getInstance().collection("Users").document(mFireBaseUser.getUid());
-                    Task<DocumentSnapshot> doc = mDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+                    CollectionReference plantsCollection = mDocRef.collection("Plants");
+                    plantsCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            DocumentSnapshot doc = task.getResult();
-                            name = doc.getString("Name");
-                            Toast.makeText(SplashActivity.this, "Welcome, " + name, Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                            SplashActivity.this.finish();
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if(queryDocumentSnapshots != null){
+
+                                for(DocumentChange snap : queryDocumentSnapshots.getDocumentChanges()){
+                                    double currentWater = Double.parseDouble(Objects.requireNonNull(snap.getDocument().get("CurrentWater")).toString());
+                                    double totalWater = Double.parseDouble(Objects.requireNonNull(snap.getDocument().get("TotalWater")).toString());
+                                    String name = Objects.requireNonNull(snap.getDocument().get("Name")).toString();
+                                    String type = Objects.requireNonNull(snap.getDocument().get("Type")).toString();
+                                    String note = Objects.requireNonNull(snap.getDocument().get("Note")).toString();
+                                    ArrayList images = (ArrayList<String>) Objects.requireNonNull(snap.getDocument().get("PlantsImages"));
+                                    String profilePicture = Objects.requireNonNull(snap.getDocument().get("ProfilePicture")).toString();
+                                    int dayUpdated = Integer.parseInt(Objects.requireNonNull(snap.getDocument().get("DayUpdated")).toString());
+                                    Plant p = new Plant(name,type,totalWater,currentWater,profilePicture,images,note,0);
+                                    p.dayUpdated = dayUpdated;
+                                    plants.add(p);
+                                }
+                                downloadImages();
+                            }
                         }
                     });
+
                 }
                 else {
                     Toast.makeText(SplashActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SplashActivity.this,LoginActivity.class));
+                    Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
+                    startActivity(intent);
                     SplashActivity.this.finish();
                 }
             }
         };
     }
+
+    private void downloadImages(){
+        storage = FirebaseStorage.getInstance();
+        imageRef = storage.getReference(); //stoargeReference
+
+        for(Plant plant : plants){
+            for(final String image : plant.getPlantsImages()) {
+                if(!(image.equals("1"))){
+                    final String storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+                    File file = new File(storageDir + "/" + image);
+                    if (!(file.exists())) {
+                        StorageReference imageReference = imageRef.child(image);
+                        imageReference.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                            @Override
+                            public void onSuccess(byte[] bytes) {
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                File file = new File(storageDir,image);
+                                FileOutputStream out;
+                                try {
+
+                                    out = new FileOutputStream(file);
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                                    out.close();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                }
+            }
+            }
+        }
+        try {
+            Thread.sleep(1000); //Lets the images load up smoothly
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Gson g = new Gson();
+        String json = g.toJson(plants);
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        intent.putExtra("plants",json);
+        startActivity(intent);
+        SplashActivity.this.finish();
+    }
+
 }

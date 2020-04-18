@@ -74,7 +74,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         }
         Bitmap b = BitmapFactory.decodeResource(context.getApplicationContext().getResources(),R.drawable.plant);
         try {
-            b = BitmapFactory.decodeFile(MainActivity.plants.get(plantClicked).getPlantsImages().get(pos));
+            String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+            b = BitmapFactory.decodeFile(path + "/" + MainActivity.plants.get(plantClicked).getPlantsImages().get(pos));
         } catch (Exception e) {
             e.printStackTrace();
         }

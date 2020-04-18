@@ -3,6 +3,7 @@ package com.example.digitalgarden.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,7 +147,8 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
         }
         Bitmap b = BitmapFactory.decodeResource(context.getApplicationContext().getResources(),R.drawable.plant);
         try {
-            b = BitmapFactory.decodeFile(MainActivity.plants.get(pos).getPlantImage());
+            String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+            b = BitmapFactory.decodeFile(path + "/" + MainActivity.plants.get(pos).getPlantImage());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -8,6 +8,7 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,10 +20,17 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.digitalgarden.R;
 import com.example.digitalgarden.adapters.GalleryAdapter;
 import com.example.digitalgarden.adapters.PlantsAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,15 +41,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.annotation.RegEx;
 
 public class GalleryActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private int plantPosition;
     private RecyclerView mRecyclerView;
     private final int NUMOFCOLUMNS = 3;
-    private String currentImagePath,imageName;
+    private String currentImagePath,imageName,timeStamp,imageNameNew;
     private GalleryAdapter myAdapter;
     private ArrayList<String> list;
+    private Uri imageUri;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +110,7 @@ public class GalleryActivity extends AppCompatActivity {
         }
 
 
-        Uri imageUri = FileProvider.getUriForFile(this, "com.example.digitalgarden.fileprovider", imageFile);
+        imageUri = FileProvider.getUriForFile(this, "com.example.digitalgarden.fileprovider", imageFile);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(cameraIntent, 1);
 
@@ -104,7 +119,7 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==1){
+        if(resultCode==1 || resultCode==-1){
             Bitmap bitmap = BitmapFactory.decodeFile(currentImagePath);
             FileOutputStream out;
             try {
@@ -128,8 +143,9 @@ public class GalleryActivity extends AppCompatActivity {
 
                 try {
                     FileOutputStream out2 = new FileOutputStream(currentImagePath);
-                    rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, out2);
-                    MainActivity.plants.get(plantPosition).addImageToGallery(currentImagePath);
+                    rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 25, out2);
+                    uploadPicture(currentImagePath);
+                    MainActivity.plants.get(plantPosition).addImageToGallery(imageNameNew);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -149,7 +165,7 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     private File getImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         imageName ="jpg_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
@@ -162,5 +178,40 @@ public class GalleryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         myAdapter.notifyDataSetChanged();
+    }
+
+    private void uploadPicture(String path){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Please wait");
+        progressDialog.show();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+
+        Pattern p = Pattern.compile("jpg_[0-9]*_[0-9]*_[0-9]*(.)jpg");
+        Matcher m = p.matcher(path);
+        imageNameNew = path.substring(74);
+        StorageReference reference = storageReference.child(imageNameNew);
+
+        File file = new File(path);
+        Uri imageUri2 = Uri.fromFile(file);
+        reference.putFile(imageUri2).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                progressDialog.dismiss();
+                Toast.makeText(GalleryActivity.this, "Picture Uploaded!", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(GalleryActivity.this, "Mission Failed", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.00 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                progressDialog.setMessage("Uploading picture: " + (int) progress + "%");
+            }
+        });
     }
 }

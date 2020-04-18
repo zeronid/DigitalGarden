@@ -58,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/newPlantNameEditText" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/makePlantButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -81,7 +81,7 @@
         android:clickable="true"
         android:onClick="changePhotoPicture"
         android:padding="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
+        app:layout_constraintBottom_toTopOf="@+id/makePlantButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

@@ -5,11 +5,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.digitalgarden.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 
@@ -27,6 +33,8 @@ public class PlantDisplayActivity extends AppCompatActivity {
     private TextView plantName, plantType, plantNote , waterLevelTextView;
     private ImageView plantPicture;
     private int plantPosition;
+    private FirebaseUser mUser;
+    private CollectionReference mColRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,7 @@ public class PlantDisplayActivity extends AppCompatActivity {
         plantNote = findViewById(R.id.plantsNoteTextView);
         waterLevelTextView = findViewById(R.id.waterLevelTextView);
         plantPosition = getIntent().getExtras().getInt("position");
+        Context context = this.getApplicationContext();
 
         //Setting up the text in the water level text view
         double currentWater = MainActivity.plants.get(plantPosition).getCurrentWater() * 10;
@@ -68,9 +77,12 @@ public class PlantDisplayActivity extends AppCompatActivity {
         plantType.setText(MainActivity.plants.get(plantPosition).getType());
 
         //Setting up the picture.
-        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.plants.get(plantPosition).getPlantImage());
+        String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+        Bitmap bitmap = BitmapFactory.decodeFile(path + "/" + MainActivity.plants.get(plantPosition).getPlantImage());
         plantPicture = findViewById(R.id.plantInfoPlantImageView);
-        plantPicture.setImageBitmap(bitmap);
+        if(bitmap != null) {
+            plantPicture.setImageBitmap(bitmap);
+        }
 
         //Setting up the note.
         if(MainActivity.plants.get(plantPosition).getNote() != null) {
@@ -103,26 +115,33 @@ public class PlantDisplayActivity extends AppCompatActivity {
                 setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                if(MainActivity.plants.get(plantPosition).getPlantImage() != "1") {
-                                    deleteImage(plantPosition);
-                                }
-                                for(String plant:MainActivity.plants.get(plantPosition).getPlantsImages()){
-                                    File file = new File(plant);
-                                    file.delete();
-                                }
-                                MainActivity.plantNames.remove(plantPosition);
-                                MainActivity.plants.remove(plantPosition);
-                                finish();//Very important,when you press "Yes" finish the activity.
+
+                        mUser = FirebaseAuth.getInstance().getCurrentUser();
+                        mColRef = FirebaseFirestore.getInstance().collection("Users").document(mUser.getUid()).collection("Plants");
+                        mColRef.document((MainActivity.plants.get(plantPosition).getName())).delete();
+
+//                        if(MainActivity.plants.get(plantPosition).getPlantImage() != "1") {
+//                            deleteImage(plantPosition);
+//                        }
+                        for(String image:MainActivity.plants.get(plantPosition).getPlantsImages()){
+                            String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+                            File file = new File(path + "/" + image);
+                            file.delete();
+                        }
+                        MainActivity.plantNames.remove(plantPosition);
+                        MainActivity.plants.remove(plantPosition);
+                        finish();//Very important,when you press "Yes" finish the activity.
                     }
                 }).setNegativeButton(android.R.string.no,null).
                 setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
 
-    private void deleteImage(int pos){
-            File file = new File(MainActivity.plants.get(pos).getPlantImage());
-            file.delete();
-    }
+//    private void deleteImage(int pos){
+//            String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+//            File file = new File(path + "/" + MainActivity.plants.get(pos).getPlantImage());
+//            file.delete();
+//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -148,7 +167,8 @@ public class PlantDisplayActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.plants.get(plantPosition).getPlantImage());
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+        Bitmap bitmap = BitmapFactory.decodeFile(path + "/" + MainActivity.plants.get(plantPosition).getPlantImage());
         plantPicture = findViewById(R.id.plantInfoPlantImageView);
         plantPicture.setImageBitmap(bitmap);
     }

@@ -1,10 +1,8 @@
 package com.example.digitalgarden.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,27 +10,27 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.digitalgarden.jobs.PlantsWaterJob;
+import com.example.digitalgarden.jobs.UploadPlantsToServer;
 import com.example.digitalgarden.models.Plant;
 import com.example.digitalgarden.R;
 import com.example.digitalgarden.adapters.PlantsAdapter;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private final int NUMOFCOLUMNS = 2;
     private Toolbar toolbar;
     private PlantsAdapter adapter;
+    private CollectionReference mColRef;
+    private FirebaseUser mUser;
 
 
 
@@ -71,11 +71,6 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle("My Plants");
     }
 
-    @Override
-    protected void onPause() {
-        saveData();
-        super.onPause();
-    }
 
     @Override
     protected void onResume() {
@@ -85,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        saveData();
+        //Uploads the plants to the server
+        uploadPlantsToServer();
         //Start the notification activity (Only for first time opening program)
         startWateringJob();
         super.onDestroy();
@@ -135,27 +131,17 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-
-    //Saves the plants
-    private void saveData(){
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences",MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(plants);
-        String names = gson.toJson(plantNames);
-        editor.putString("plant list",json);
-        editor.putString("name list",names);
-        editor.apply();
-    }
     private void loadData(){
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences",MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("plant list",null);
-        String names = sharedPreferences.getString("name list",null);
-        java.lang.reflect.Type type = new TypeToken<ArrayList<Plant>>() {}.getType();
-        java.lang.reflect.Type type2 = new TypeToken<ArrayList<String>>() {}.getType();
-        plants = gson.fromJson(json,type);
-        plantNames = gson.fromJson(names,type2);
+        if (getIntent().hasExtra("plants")) {
+            String json = getIntent().getExtras().getString("plants");
+            Gson g = new Gson();
+            java.lang.reflect.Type type = new TypeToken<ArrayList<Plant>>() {
+            }.getType();
+            plants = g.fromJson(json, type);
+            for (Plant plant : plants) {
+                plantNames.add(plant.getName());
+            }
+        }
         if(plants == null){
             plants = new ArrayList<>();
             plantNames = new ArrayList<>();
@@ -183,9 +169,32 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }else if(plants.get(i).dayUpdated < LocalDate.now().getDayOfYear()){
                 plants.get(i).setCurrentWater(plants.get(i).getCurrentWater() - (LocalDate.now().getDayOfYear() - plants.get(i).dayUpdated));
+                plants.get(i).dayUpdated = LocalDate.now().getDayOfYear();
             } else if(plants.get(i).dayUpdated > LocalDate.now().getDayOfYear()){
                 plants.get(i).setCurrentWater(plants.get(i).getCurrentWater() - ((365-plants.get(i).dayUpdated) + LocalDate.now().getDayOfYear()));
+                plants.get(i).dayUpdated = LocalDate.now().getDayOfYear();
             }
         }
+    }
+
+    public void uploadPlantsToServer(){
+
+        //Put the plants array in bundle as JSON
+        Gson g = new Gson();
+        String json = g.toJson(plants);
+        PersistableBundle bundle = new PersistableBundle();
+        bundle.putString("plants",json);
+
+        ComponentName componentName = new ComponentName(this, UploadPlantsToServer.class);
+        JobInfo info = new JobInfo.Builder(2, componentName).setExtras(bundle).setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY).setPersisted(true).build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.schedule(info);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MainActivity.this.finish();
     }
 }

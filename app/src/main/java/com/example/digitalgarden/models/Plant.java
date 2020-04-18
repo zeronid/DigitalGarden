@@ -13,14 +13,25 @@ public class Plant {
     private ArrayList<String> plantsImages;
     public int dayUpdated;
 
-    public Plant(String name,String type,int waterLevel,int currentWater, String imageStringUUID,String note){
+    public Plant(String name,String type,double waterLevel,double currentWater, String imageStringUUID,String note){
         setName(name);
         setType(type);
         setWaterLevel(waterLevel);
         setPlantImage(imageStringUUID);
         setNote(note);
         setCurrentWater(currentWater);
-        setPlantsImages(imageStringUUID);
+        setPlantsImages(imageStringUUID,new ArrayList<String>());
+        this.dayUpdated = LocalDate.now().getDayOfYear();
+    }
+
+    public Plant(String name,String type,double waterLevel,double currentWater, String imageStringUUID,ArrayList<String> plantsImages,String note,int none){
+        setName(name);
+        setType(type);
+        setWaterLevel(waterLevel);
+        setPlantImage(imageStringUUID);
+        setNote(note);
+        setCurrentWater(currentWater);
+        setPlantsImages("",plantsImages);
         this.dayUpdated = LocalDate.now().getDayOfYear();
     }
 
@@ -57,9 +68,11 @@ public class Plant {
         }else this.currentWater = 0;
     }
     public ArrayList<String> getPlantsImages() { return plantsImages; }
-    public void setPlantsImages(String firstPlantsImage) {
-        this.plantsImages = new ArrayList<String>();
-        plantsImages.add(firstPlantsImage);
+    public void setPlantsImages(String firstPlantsImage,ArrayList<String> plantsImages) {
+        this.plantsImages = plantsImages;
+//        if(!(firstPlantsImage.equals("")) && !(plantsImages.contains(firstPlantsImage))) {
+//            plantsImages.add(firstPlantsImage);
+//        }
     }
     public void addImageToGallery(String image){
         this.plantsImages.add(0,image);

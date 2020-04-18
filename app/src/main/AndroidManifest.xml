@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".app.app"
@@ -13,7 +14,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/digital_garden_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:requestLegacyExternalStorage="true">
         <activity android:name=".activities.ShowGalleryImageActivity"></activity>
         <activity android:name=".activities.GalleryActivity" />
         <activity android:name=".activities.SignUpActivity" />
@@ -47,6 +49,7 @@
                 android:resource="@xml/file_path" />
         </provider>
         <service android:name=".jobs.PlantsWaterJob" android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service android:name=".jobs.UploadPlantsToServer" android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>

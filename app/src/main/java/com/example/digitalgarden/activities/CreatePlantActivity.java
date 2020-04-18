@@ -1,31 +1,26 @@
 package com.example.digitalgarden.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import android.Manifest;
-import android.content.Context;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -33,16 +28,22 @@ import android.widget.Toast;
 
 import com.example.digitalgarden.models.Plant;
 import com.example.digitalgarden.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class CreatePlantActivity extends AppCompatActivity {
 
@@ -55,11 +56,15 @@ public class CreatePlantActivity extends AppCompatActivity {
     private String currentImagePath = null;
     private static final int IMAGE_REQUEST = 1;
     private File imageFile;
+    private String timeStamp,imageName,imageNameAfterUri;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_plant);
+
 
         //Sets the types of plants into the typeView.
         AutoCompleteTextView typeView = findViewById(R.id.newPlantTypeEditText);
@@ -91,7 +96,7 @@ public class CreatePlantActivity extends AppCompatActivity {
         newPlantName = findViewById(R.id.newPlantNameEditText);
         plantPicture = findViewById(R.id.plantImageView);
         AutoCompleteTextView newPlantType = findViewById(R.id.newPlantTypeEditText);
-        Bitmap plantBitmap = ((BitmapDrawable)plantPicture.getDrawable()).getBitmap();
+
         plantsNote = findViewById(R.id.plantsNoteEditText);
 
         //Get the last watered value
@@ -112,10 +117,18 @@ public class CreatePlantActivity extends AppCompatActivity {
             if(currentImagePath == null){
                 currentImagePath = "1";
             }
-            Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue ,(waterFrequencySpinnerIntegerValue - lastWateredSpinnerIntegerValue),currentImagePath,plantsNote.getText().toString());
-            MainActivity.plants.add(plant);
-            MainActivity.plantNames.add(newPlantName.getText().toString());
-            finish();
+            //Upload the image to firebase
+            if(!(currentImagePath == "1")) {
+                Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue ,(waterFrequencySpinnerIntegerValue - lastWateredSpinnerIntegerValue),imageNameAfterUri,plantsNote.getText().toString());
+                MainActivity.plants.add(plant);
+                MainActivity.plantNames.add(newPlantName.getText().toString());
+                uploadPicture(currentImagePath);
+            } else {
+                Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue, (waterFrequencySpinnerIntegerValue - lastWateredSpinnerIntegerValue), "1", plantsNote.getText().toString());
+                MainActivity.plants.add(plant);
+                MainActivity.plantNames.add(newPlantName.getText().toString());
+                CreatePlantActivity.this.finish();
+            }
         }
     }
 
@@ -131,8 +144,8 @@ public class CreatePlantActivity extends AppCompatActivity {
 
     //Creates an empty image file for me to write to.
     private File getImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageName ="jpg_" + timeStamp + "_";
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        imageName ="jpg_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
         File imageFile = File.createTempFile(imageName,".jpg",storageDir);
@@ -204,12 +217,10 @@ public class CreatePlantActivity extends AppCompatActivity {
 
                 try {
                     FileOutputStream out = new FileOutputStream(currentImagePath);
-                    rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                    rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 25, out);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-
-
 
                 plantPicture = findViewById(R.id.plantImageView);
                 plantPicture.setImageBitmap(rotatedBitmap);
@@ -225,4 +236,43 @@ public class CreatePlantActivity extends AppCompatActivity {
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
                 matrix, true);
     }
+
+        private void uploadPicture(String path){
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Please wait");
+            progressDialog.show();
+            storage = FirebaseStorage.getInstance();
+            storageReference = storage.getReference();
+
+            Pattern p = Pattern.compile("jpg_[0-9]*_[0-9]*_[0-9]*(.)jpg");
+            Matcher m = p.matcher(path);
+            imageNameAfterUri = path.substring(74);
+            StorageReference reference = storageReference.child(imageNameAfterUri);
+
+            File file = new File(path);
+            Uri imageUri = Uri.fromFile(file);
+            reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
+                    Toast.makeText(CreatePlantActivity.this, "Plant created!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(CreatePlantActivity.this, "Mission Failed", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                    Button makePlantButton = findViewById(R.id.makePlantButton);
+                    makePlantButton.animate().setDuration(1000).alpha(0).start();
+                    double progress = (100.00 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                    progressDialog.setMessage("Creating plant: " + (int) progress + "%");
+                }
+            });
+        }
+
+
 }
