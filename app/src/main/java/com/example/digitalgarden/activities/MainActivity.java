@@ -40,13 +40,10 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Plant> plants = new ArrayList<>();
 
     private RecyclerView plantList;
-    private final int NUMOFCOLUMNS = 2;
     private Toolbar toolbar;
     private PlantsAdapter adapter;
-    private CollectionReference mColRef;
-    private FirebaseUser mUser;
 
-
+    private final int NUMOFCOLUMNS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

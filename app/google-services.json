@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "79944466678",
+    "firebase_url": "https://digital-garden-ea3d6.firebaseio.com",
+    "project_id": "digital-garden-ea3d6",
+    "storage_bucket": "digital-garden-ea3d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79944466678:android:dce710c0a16fb337952cd7",
+        "android_client_info": {
+          "package_name": "com.example.digitalgarden"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79944466678-oqcj993vltluor731ml4r48tm55uitlh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0NzubXyGGY9po1pWC5w_QHOMBE3BphwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79944466678-oqcj993vltluor731ml4r48tm55uitlh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

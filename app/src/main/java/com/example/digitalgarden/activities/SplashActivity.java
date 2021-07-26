@@ -3,24 +3,17 @@ package com.example.digitalgarden.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
 import android.os.Environment;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.digitalgarden.R;
 import com.example.digitalgarden.models.Plant;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -31,16 +24,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.regex.Pattern;
-
-import io.grpc.Context;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -49,7 +36,7 @@ public class SplashActivity extends AppCompatActivity {
     private FirebaseUser mFireBaseUser;
     private FirebaseAuth mFirebaseAuth;
     private DocumentReference mDocRef;
-    private ArrayList<Plant> plants;
+    private ArrayList<Plant> plants = new ArrayList<>();
     private FirebaseStorage storage;
     private StorageReference imageRef;
 
@@ -61,7 +48,6 @@ public class SplashActivity extends AppCompatActivity {
         appName = findViewById(R.id.appName);
         Typeface typeface = ResourcesCompat.getFont(this,R.font.sweet_leaf);
         appName.setTypeface(typeface);
-        plants = new ArrayList<>();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         new Thread(new Runnable() {
@@ -86,7 +72,6 @@ public class SplashActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             if(queryDocumentSnapshots != null){
-
                                 for(DocumentChange snap : queryDocumentSnapshots.getDocumentChanges()){
                                     double currentWater = Double.parseDouble(Objects.requireNonNull(snap.getDocument().get("CurrentWater")).toString());
                                     double totalWater = Double.parseDouble(Objects.requireNonNull(snap.getDocument().get("TotalWater")).toString());
@@ -134,7 +119,6 @@ public class SplashActivity extends AppCompatActivity {
                                 File file = new File(storageDir,image);
                                 FileOutputStream out;
                                 try {
-
                                     out = new FileOutputStream(file);
                                     bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
                                     out.close();
