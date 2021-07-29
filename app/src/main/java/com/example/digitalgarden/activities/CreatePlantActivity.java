@@ -118,11 +118,11 @@ public class CreatePlantActivity extends AppCompatActivity {
                 currentImagePath = "1";
             }
             //Upload the image to firebase
-            if(!(currentImagePath == "1")) {
+            if(!currentImagePath.equals("1")) {
+                uploadPicture(currentImagePath);
                 Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue ,(waterFrequencySpinnerIntegerValue - lastWateredSpinnerIntegerValue),imageNameAfterUri,plantsNote.getText().toString());
                 MainActivity.plants.add(plant);
                 MainActivity.plantNames.add(newPlantName.getText().toString());
-                uploadPicture(currentImagePath);
             } else {
                 Plant plant = new Plant(newPlantName.getText().toString(), newPlantType.getText().toString(), waterFrequencySpinnerIntegerValue, (waterFrequencySpinnerIntegerValue - lastWateredSpinnerIntegerValue), "1", plantsNote.getText().toString());
                 MainActivity.plants.add(plant);
