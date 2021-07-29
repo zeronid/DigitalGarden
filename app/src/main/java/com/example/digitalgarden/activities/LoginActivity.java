@@ -45,12 +45,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView appName, signUp , emailEditText, passwordEditText;
     private Button signInButton;
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private DocumentReference mDocRef;
-    private String name;
-    private ArrayList<Plant> plants;
-    FirebaseStorage storage;
-    StorageReference imageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,30 +62,6 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         signUp = findViewById(R.id.signUpTextView);
-        plants = new ArrayList<>();
-
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser mFireBaseUser = mFirebaseAuth.getCurrentUser();
-                if (mFireBaseUser != null) {
-                    mDocRef = FirebaseFirestore.getInstance().collection("Users").document(mFireBaseUser.getUid());
-                    Task<DocumentSnapshot> doc = mDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            DocumentSnapshot doc = task.getResult();
-                            name = doc.getString("Name");
-                            Toast.makeText(LoginActivity.this, "Welcome, " + name, Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            LoginActivity.this.finish();
-                        }
-                    });
-                }
-                else {
-                    Toast.makeText(LoginActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,38 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                     mFirebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                FirebaseUser mFireBaseUser = mFirebaseAuth.getCurrentUser();
-                                if (mFireBaseUser != null){
-                                    mDocRef = FirebaseFirestore.getInstance().collection("Users").document(mFireBaseUser.getUid());
 
-
-                                    CollectionReference plantsCollection = mDocRef.collection("Plants");
-                                    plantsCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            if(queryDocumentSnapshots != null){
-                                                for(DocumentChange snap : queryDocumentSnapshots.getDocumentChanges()){
-                                                    double currentWater = Double.parseDouble(Objects.requireNonNull(snap.getDocument().get("CurrentWater")).toString());
-                                                    double totalWater = Double.parseDouble(Objects.requireNonNull(snap.getDocument().get("TotalWater")).toString());
-                                                    String name = Objects.requireNonNull(snap.getDocument().get("Name")).toString();
-                                                    String type = Objects.requireNonNull(snap.getDocument().get("Type")).toString();
-                                                    String note = Objects.requireNonNull(snap.getDocument().get("Note")).toString();
-                                                    String profilePicture = Objects.requireNonNull(snap.getDocument().get("ProfilePicture")).toString();
-                                                    int dayUpdated = Integer.parseInt(Objects.requireNonNull(snap.getDocument().get("DayUpdated")).toString());
-                                                    ArrayList images = (ArrayList) Objects.requireNonNull(snap.getDocument().get("PlantsImages"));
-                                                    Plant p = new Plant(name,type,totalWater,currentWater,profilePicture,images,note,0);
-                                                    p.dayUpdated = dayUpdated;
-                                                    plants.add(p);
-                                                }
-                                                downloadImages();
-                                            }
-                                        }
-                                    });
-                                }
-                            }else{
-                                Toast.makeText(LoginActivity.this, "Login error, please try again.", Toast.LENGTH_SHORT).show();
-                            }
                         }
                     });
                 }else {
@@ -157,53 +96,4 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void downloadImages(){
-        storage = FirebaseStorage.getInstance();
-        imageRef = storage.getReference();
-
-        for(Plant plant : plants){
-            for(final String image : plant.getPlantsImages()) {
-                if(!(image.equals("1"))){
-                    final String storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
-                    File file = new File(storageDir + "/" + image);
-                    if (!(file.exists())) {
-                        StorageReference imageReference = imageRef.child(image);
-                        imageReference.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                            @Override
-                            public void onSuccess(byte[] bytes) {
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                File file = new File(storageDir,image);
-                                FileOutputStream out;
-                                try {
-
-                                    out = new FileOutputStream(file);
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
-                                    out.close();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        }
-        try {
-            Thread.sleep(1000); //Lets the images load up smoothly
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Gson g = new Gson();
-        String json = g.toJson(plants);
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("plants",json);
-        startActivity(intent);
-        LoginActivity.this.finish();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-    }
 }

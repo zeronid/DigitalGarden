@@ -132,7 +132,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
         try {
-            Thread.sleep(1000); //Lets the images load up smoothly
+            Thread.sleep(700); //Lets the images load up smoothly
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -140,8 +140,8 @@ public class SplashActivity extends AppCompatActivity {
         String json = g.toJson(plants);
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         intent.putExtra("plants",json);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        SplashActivity.this.finish();
     }
 
 }
