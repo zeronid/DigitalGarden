@@ -12,3 +12,6 @@
 ##### **This app is using Firebase for user authantication and data storing.**
 ![log in image](https://i.ibb.co/cbWskGc/log-in.jpg)
 ![main_screen_image](https://i.ibb.co/tDkCFd6/main.jpg)
+![main_screen_search_image](https://i.ibb.co/DGsyJyR/main-search.jpg)
+![create_plant_image](https://i.ibb.co/tDkCFd6/main.jpg)
+![plant_screen_image](https://i.ibb.co/tDkCFd6/main.jpg)
