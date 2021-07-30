@@ -8,7 +8,7 @@
 3. Take *pictures* of your plants and mark their *progress*.
 4. Set *watering times* for your plants and check up on them.
 5. Get *notifications* so you wont ever forget to water your plants.
-6. Preview : https://www.youtube.com/watch?v=Ed_kXV13tM8&ab_channel=AlexLevenberg
+6. Preview : https://youtu.be/sm4NIIgNRI0
 
 ##### **This app is using Firebase for user authantication and data storing.**
 
