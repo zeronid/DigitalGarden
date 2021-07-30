@@ -10,4 +10,5 @@
 5. Get *notifications* so you wont ever forget to water your plants.
 
 ##### **This app is using Firebase for user authantication and data storing.**
-![log in image](https://i.ibb.co/cbWskGc/log-in.jpg) ![main_screen_image](https://i.ibb.co/tDkCFd6/main.jpg)
+![log in image](https://i.ibb.co/cbWskGc/log-in.jpg)
+![main_screen_image](https://i.ibb.co/tDkCFd6/main.jpg)
