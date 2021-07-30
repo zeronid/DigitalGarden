@@ -9,4 +9,4 @@
 4. Set *watering times* for your plants and check up on them.
 5. Get *notifications* so you wont ever forget to water your plants.
 
-**This app is using Firebase for user authantication and data storing.
+##### **This app is using Firebase for user authantication and data storing.**
