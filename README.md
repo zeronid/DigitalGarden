@@ -19,5 +19,7 @@
 
                                                          ## Home Search
 ![main_screen_search_image](https://i.ibb.co/DGsyJyR/main-search.jpg)
-![create_plant_image](https://i.ibb.co/tDkCFd6/main.jpg)
+                                                         ## Create Plant
+![create_plant_image](https://i.ibb.co/PYsSXsn/Webp-net-resizeimage.jpg")
+                                                         ## Home Search
 ![plant_screen_image](https://i.ibb.co/tDkCFd6/main.jpg)
