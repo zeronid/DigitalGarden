@@ -1,5 +1,5 @@
 # DigitalGarden
-A personal project made with **Android Studio**, **Java** and **Firebase**.
+A personal project made with **Android Studio**, **Java** and **Firebase**./n
 Digital Garden is an Android application that helps you manage your house plants.
 
 1. Create a *personal user* for yourself.
